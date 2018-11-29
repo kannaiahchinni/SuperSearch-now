@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<record_update table="m2m_sp_widget_dependency">
+<?xml version="1.0" encoding="UTF-8"?><record_update table="m2m_sp_widget_dependency">
     <m2m_sp_widget_dependency action="INSERT_OR_UPDATE">
         <sp_dependency display_value="gojschart">92632b88db556300c3ab36cb7c961945</sp_dependency>
         <sp_widget display_value="super search">5af2e708db956300ba189ea3db9619f1</sp_widget>

@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<record_update table="sp_widget">
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_widget">
     <sp_widget action="INSERT_OR_UPDATE">
         <category>custom</category>
         <client_script><![CDATA[function($scope) {
@@ -134,14 +133,14 @@ if(input && input.searchStr){
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2018-10-17 14:26:52</sys_created_on>
         <sys_id>5af2e708db956300ba189ea3db9619f1</sys_id>
-        <sys_mod_count>44</sys_mod_count>
+        <sys_mod_count>45</sys_mod_count>
         <sys_name>super search</sys_name>
         <sys_package display_value="super search" source="x_snc_super_search">4863b5fddbc52740ba189ea3db961925</sys_package>
         <sys_policy/>
         <sys_scope display_value="super search">4863b5fddbc52740ba189ea3db961925</sys_scope>
         <sys_update_name>sp_widget_5af2e708db956300ba189ea3db9619f1</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2018-10-29 06:57:29</sys_updated_on>
+        <sys_updated_on>2018-11-29 04:57:46</sys_updated_on>
         <template><![CDATA[<div class="container">
   <h1 class="center">Super Search</h1>
     <div class="form-group">
@@ -158,6 +157,8 @@ if(input && input.searchStr){
     </div>
 </div>
 
-<div id="myDiagramDiv" style="border: solid 1px black; width: 100%; height: 800px"></div>]]></template>
+<!-- <div id="myDiagramDiv" style="border: solid 1px black; width: 100%; height: 800px"></div>
+
+-->]]></template>
     </sp_widget>
 </record_update>

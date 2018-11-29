@@ -1,0 +1,465 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_script_include">
+    <sys_script_include action="INSERT_OR_UPDATE">
+        <access>public</access>
+        <active>true</active>
+        <api_name>x_snc_super_search.LeadAutomationUtil</api_name>
+        <client_callable>false</client_callable>
+        <description/>
+        <name>LeadAutomationUtil</name>
+        <script><![CDATA[var LeadAutomationUtil = Class.create();
+LeadAutomationUtil.prototype = {
+  _verbose: false,
+  _lock: false,
+  _audit: false,
+  _automationEnabled: false,
+  _tableName: 'u_adr_area_play_mapping',
+  _leadStatusALogic: ['Open', 'Attempting to Contact', 'Engaged', 'Reassigned'], // possibility to move into property file.
+  _leadStatusBLogic: ['Remarket', 'Qualified', 'List Import', 'Hold', 'Rejected'],
+  _leadDateRange: 90,
+  _leadDateEncodedQuery: '',
+  _guestUserSysId: '',
+  _logger: '',
+  _constants: {
+    OPEN: 'Open',
+    PLAY: 'u_play',
+    AREA: 'u_area',
+    ADR: 'u_adr',
+    COUNT: 'u_count',
+    COUNTRY: 'u_country',
+    STATE: 'u_state',
+    ACTIVE: 'u_active',
+    SYS_ID: 'sys_id',
+    US: 'us',
+    CA: 'ca',
+    VERBOSITY: 'adr.roundrobin.log.verbosity',
+    LOCK: 'adr.roundrobin.enable.lock',
+    AUDIT: 'adr.roubdrobin.enable.audit',
+    AUTOMATION_ENABLED: 'adr.automation.enabled',
+    DATE_RANGE: 'adr.lead.lastAssigned.date.range'
+  },
+  _log: function(info, required) {
+    if (this._verbose || required) {
+      gs.log(info, 'LeadAutomationUtil');
+    }
+  },
+  initialize: function() {
+    this._verbose = gs.getProperty(this._constants.VERBOSITY) === 'true'; // change this property with Eloqua logger property if needed
+    this._lock = gs.getProperty(this._constants.LOCK) === 'true';
+    this._audit = gs.getProperty(this._constants.AUDIT) === 'true';
+    this._automationEnabled = gs.getProperty(this._constants.AUTOMATION_ENABLED) === 'true';
+    this._leadDateRange = gs.getProperty(this._constants.DATE_RANGE);
+    this._leadDateEncodedQuery = 'u_adr_assigned_dateONLast ' + this._leadDateRange + ' days@javascript:gs.daysAgoStart(' + this._leadDateRange + ')@javascript:gs.daysAgoEnd(0)';
+    this._guestUserSysId = EloquaLeadManagementUtil.getGuestUser().sys_id;
+  },
+  getAdrRecord: function(play, area, leadSysId) {
+    this._log(" Running get ADR record for leadSysId");
+    var adrGr = new GlideRecord(this._tableName);
+    adrGr.addQuery(this._constants.PLAY, play);
+    adrGr.addQuery('u_area', area); //  getting sys_id
+    adrGr.orderBy(this._constants.COUNT);
+    adrGr.orderBy(this._constants.ADR);
+    adrGr.query();
+    if (adrGr.next()) {
+      return adrGr;
+    }
+    return;
+
+  },
+  getAdr: function(play, area, leadSysId) {
+    this._log(" Runing ADR Logic for lead with sysId " + leadSysId + " with Area = " + area + " and Play =  " + play, false);
+
+    var adrGr = this.getAdrRecord(play, area, leadSysId);
+
+    var sysId;
+    var adrSysId;
+
+    if (adrGr) {
+      sysId = adrGr.getValue(this._constants.SYS_ID);
+      /* if (this._lock) {
+      	this._log(" adr sys_id before log with lead " + leadSysId + "and  adr sys_id " + sysId);
+      	adrLock = this._getLock(this._tableName, sysId);
+      }*/
+      adrSysId = adrGr.getValue(this._constants.ADR);
+      var count = adrGr.getValue(this._constants.COUNT);
+      this._log(" Getting count for Lead  with sysId " + leadSysId + " and adrSysId " + adrSysId + "  with count (before update) " + count, false);
+      count = parseInt(count) + 1;
+      adrGr.u_count = Math.floor(count);
+      adrGr.update();
+      this._log(" Getting count for Lead  with sysId " + leadSysId + " and adrSysId " + adrSysId + "  with count (after update) " + count, false);
+      /*if (this._lock) {
+      	this._releaseLock(sysId);
+      }*/
+      if (this._audit) {
+
+        this._auditLeadAndADR(play, area, adrSysId, leadSysId, 'ADR assigned to Lead by Automation');
+
+      }
+    }
+
+    return adrSysId;
+  },
+  _auditLeadAndADR: function(play, area, adr, leadSysId, comments) {
+    this._log("Inside of  audit function for  lead with sysId " + leadSysId, false);
+    var auditGr = new GlideRecord('u_lead_automation_audit');
+    auditGr.initialize();
+    auditGr.u_area = area;
+    auditGr.u_play = play;
+    auditGr.u_adr = adr;
+    auditGr.u_lead = leadSysId;
+    auditGr.insert();
+  },
+  _getLock: function(table, sysId) {
+    this._log(" Getting lock for table " + table + " with sys_id " + sysId, false);
+    return new GlideRecordLock(table, sysId);
+  },
+  _releaseLock: function(sysId) {
+    this._log(" releasing lock for table " + this._tableName + " sys_id " + sysId, false);
+    adrLock.release();
+  },
+  _getLeadAssignedIn90Days: function(lead, account, play) {
+
+    this._log(" Inside of 90 days logic to find the ADR which is assigned in 90days back with Play = " + play + " sys_id of lead = " + lead.sys_id, false);
+    var leadGr = new GlideRecord('sales_lead');
+    leadGr.addQuery('account', account.sys_id);
+    leadGr.addQuery('assigned_to.ref_u_employee.u_gdc_play', play);
+    leadGr.addQuery('assigned_to.active', true);
+    leadGr.addQuery('assigned_to', 'NOT IN', this._guestUserSysId); // added filter to exclude Guest user from list.
+    leadGr.addEncodedQuery(this._leadDateEncodedQuery);
+    leadGr.orderByDesc('u_adr_assigned_date');
+    leadGr.query();
+
+    if (leadGr.next()) {
+      this._log(" Got the ADR for 90 days logic " + leadGr.assigned_to + " with sys_id  " + lead.sys_id, false);
+      return leadGr.assigned_to;
+    }
+    this._log(" No ADR found with 90 days logic .. returning null " + lead.sys_id, false);
+    return null;
+
+  },
+  _deriveAreaAndPlay: function(lead, account, ninetyDaysLogic) { // return adr sysId  or Lead object rather than true/false.
+    this._log('drive the area and play for lead ' + lead.sys_id, false);
+    var adrSysId;
+    try {
+      var areaObj = this._deriveStateAndCountry(lead, account);
+      var area = this._getArea(areaObj, lead.sys_id);
+      // If area is null .. no need to evaluate play and Round robin logic.
+      if (JSUtil.nil(area)) {
+        this._log(" Area is null for lead " + lead.sys_id + " terminating automation logic", false);
+        return adrSysId;
+      }
+      var play = this._deriveLeadPlay(lead);
+
+
+      var lock_name = 'adr_lock';
+      var adr_lock = new GlideMutex.get(lock_name);
+      while (adr_lock.toString() === undefined) {
+        this._log(" Lead with sys_id " + lead.sys_id + " is waiting for lock " + adr_lock.toString(), false);
+        // gs.sleep(1000);
+        adr_lock = new GlideMutex.get(lock_name); // trying to get lock for
+      }
+      this._log(" got the lock for lead with sys_id " + lead.sys_id, false);
+
+      // include 90 days logic
+      if (ninetyDaysLogic && JSUtil.notNil(play)) {
+        this._log("Calling 90 days logic for lead with sys_id = " + lead.sys_id, false);
+
+        adrSysId = this._getLeadAssignedIn90Days(lead, account, play);
+        if (JSUtil.notNil(adrSysId)) {
+          lead.assigned_to = adrSysId;
+          lead.u_lead_assigned_using = LeadConstants.LEAD_ASSIGNED_USING_SAME_ACCOUNT_PLAY;
+          lead.u_adr_assigned_date = gs.nowDateTime();
+          this._log(" Updating Lead Assigned Using with " + lead.u_lead_assigned_using + " for lead with sys_id " + lead.sys_id, false);
+
+
+        }
+      }
+
+      if (JSUtil.notNil(area) && JSUtil.notNil(play) && JSUtil.nil(adrSysId)) {
+        this._log(" Calling getAdr to get ADR with following area = " + area + " and play = " + play + " with lead sys_id " + lead.sys_id, false);
+
+        adrSysId = this.getAdr(play, area, lead.sys_id);
+        if (JSUtil.notNil(adrSysId)) {
+          this._log(" Got adr ADR Sys_id = " + adrSysId + " for lead with sys_id " + lead.sys_id, false);
+          lead.assigned_to = adrSysId;
+          lead.u_lead_assigned_using = LeadConstants.LEAD_ASSIGNED_USING_PLAY_RULES;
+          lead.u_adr_assigned_date = gs.nowDateTime();
+          this._log(" Updating Lead Assigned Using with " + lead.u_lead_assigned_using + " for lead with sys_id " + lead.sys_id, false);
+
+          //lead.setWorkflow(false);--> Enabling this improves performance.
+         lead.update(); // updating lead
+
+        } else {
+          this._log("No ADR found for Area " + area + "  and Play " + play + " for Lead with sys_id  " + lead.sys_id, false);
+        }
+      }
+      if (adr_lock.toString() != undefined) {
+        this._log(" releasing the adr lock ");
+        adr_lock.release(); // releasing glide mutex log afte lead update ....
+      }
+
+    } catch (error) {
+      this._log("Error occured in Derive and Play for Lead " + lead.sys_id + " " + error.message, true);
+      if (adr_lock.toString() != undefined) {
+        adr_lock.release();
+      }
+    }
+
+    return adrSysId;
+  },
+  _deriveStateAndCountry: function(lead, account) {
+
+    var areaObj = {};
+    if (JSUtil.notNil(lead) && JSUtil.notNil(account)) {
+      this._log(" Both lead and account are not null " + lead.sys_id, false);
+      if (JSUtil.nil(lead.country) && JSUtil.nil(account.country)) {
+        this._log("Both Lead and Account country is blank.. returning empty Area object " + lead.sys_id, false);
+        return areaObj;
+      }
+      if (JSUtil.notNil(account.country) && (account.country.toLowerCase() == this._constants.US || account.country.toLowerCase() == this._constants.CA) && JSUtil.notNil(lead.country) && (lead.country.toLowerCase() == this._constants.US || lead.country.toLowerCase() == this._constants.CA)) {
+        this._log(" Both Account and Lead country falls into US/CA .. Preparing area object with Account state and country " + lead.sys_id, false);
+        areaObj = this._prepareAreaObj(account);
+      } else if (JSUtil.notNil(account.country) && JSUtil.notNil(lead.country)) {
+        if (lead.country == account.country) {
+          this._log(" Both Account and Lead country are same  .. Preparing area object with Account state and country " + lead.sys_id, false);
+          areaObj = this._prepareAreaObj(account);
+        } else {
+          this._log(" Both Account and Lead country are different  .. Preparing area object with Lead state and country " + lead.sys_id, false);
+          areaObj = this._prepareAreaObj(lead);
+        }
+      } else if (JSUtil.nil(account.country) && JSUtil.notNil(lead.country)) {
+        this._log("  Account is empty and Lead is not null  .. Preparing area object with Lead state and country " + lead.sys_id, false);
+        areaObj = this._prepareAreaObj(lead);
+      }
+    } else if (JSUtil.notNil(lead) && JSUtil.nil(account)) {
+      this._log("  Account is empty and Lead is not null  .. Preparing area object with Lead state and country " + lead.sys_id, false);
+      areaObj = this._prepareAreaObj(lead);
+    }
+    this._log("area object is  " + JSON.stringify(areaObj) + lead.sys_id, false);
+
+
+    return areaObj;
+  },
+  _prepareAreaObj: function(obj) {
+    var area = {};
+    if (JSUtil.notNil(obj.state)) {
+      area.state = obj.state + '';
+    }
+    area.country = obj.country + '';
+    return area;
+  },
+  /*
+			To dervie Area from u_lead_assignment_country using country and state.
+			inputObj having following properties  ( state & country ).
+ 			*/
+  _getArea: function(inputObj, leadSysId) {
+
+    if (JSUtil.nil(inputObj.country) && JSUtil.nil(inputObj.state)) {
+      this._log("Both Country and State value are empty .. No Area found" + leadSysId, false);
+      return null;
+    }
+    var mappingGr = new GlideRecord('u_lead_assignment_country');
+    if (JSUtil.notNil(inputObj.country)) {
+      mappingGr.addQuery(this._constants.COUNTRY, inputObj.country);
+    }
+    if (JSUtil.notNil(inputObj.state)) {
+      mappingGr.addQuery(this._constants.STATE, inputObj.state);
+    } else {
+      mappingGr.addNullQuery(this._constants.STATE); // added state blank condition if state is empty..
+    }
+    mappingGr.addQuery(this._constants.ACTIVE, true);
+    mappingGr.addNotNullQuery(this._constants.AREA);
+    mappingGr.query();
+    if (mappingGr.getRowCount() == 1 && mappingGr.next()) {
+      var area = mappingGr.getValue(this._constants.AREA);
+      this._log(" Got area for Lead with sysId = " + leadSysId + "  Area = " + mappingGr.u_area.u_name, false);
+
+      return area;
+    } else {
+      this._log(" Got more than one area/No Area found . Considering area is empty for this lead " + leadSysId, false);
+      return null;
+    }
+
+  },
+  _deriveLeadPlay: function(lead) {
+
+
+    var match = false;
+    var rulePassed = null;
+    try {
+      this._log(' Play derivation logic is running for lead with sys_id ' + lead.sys_id, false);
+      var rule = new GlideRecord("u_gdc_play_rule");
+      rule.addQuery('u_active', true);
+      rule.orderBy("order");
+      rule.query();
+      while (rule.next()) {
+        var filter = Packages.com.glide.script.Filter;
+        // check to see if condition matches
+        //this._log(' Rule Condition ' + rule.u_conditions + " for lead with sys_id " + lead.sys_id, false);
+        match = filter.checkRecord(lead, rule.u_conditions);
+
+        if (match && (JSUtil.notNil(rule.u_play))) {
+          rulePassed = true;
+          this._log(" Matched Play Rule name " + rule.name + " for lead  with sys_id " + lead.sys_id + " and Play Rule condition is = " + rule.u_conditions, false);
+
+          this._log(" Play found for lead  with sys_id " + lead.sys_id + " Play is = " + rule.u_play.u_name, false);
+
+
+          return rule.u_play;
+        }
+      }
+      if (!rulePassed) {
+        this._log(" No play rule found for lead with Sys_id " + lead.sys_id, false);
+        return null;
+      }
+    } catch (ex) {
+      this._log('Exception occured while deriving play for lead with sys_id' + lead.sys_id + ex.message, true);
+      return null;
+    }
+
+
+  },
+  _checkAssignedToAndPlay: function(lead) {
+    if (JSUtil.notNil(lead.assigned_to) && lead.assigned_to.active) {
+      if (JSUtil.notNil(lead.assigned_to.u_gdc_play) && lead.assigned_to.u_gdc_play.u_valid_gdc_play && lead.assigned_to.u_gdc_play.u_active) {
+        this._log('Assinged_to with valid and active gdc play. Dont run deriveLeadPlay for lead ' + lead.sys_id, false);
+        return false;
+      } else {
+        this._log('Assinged_to is not null or assigned to  does not have valid gdc_play or active gdc play. Running deriveLeadPlay for lead ' + lead.sys_id, false);
+        return true;
+      }
+    } else {
+      this._log('Assinged_to is null or assigned to is not active. Running deriveLeadPlay for lead ' + lead.sys_id, false);
+      return true;
+    }
+  },
+  /*
+			Automation logic will start from here..
+			1. Lead object
+			2. Account object
+			3. oldLeadStatus will come after some rules.. it won't come from eloqua ..
+ 			*/
+  checkExistingLead: function(lead, account, oldLeadStatus,eloquaAssignedTo) {
+
+    this._log("Executing Lead Automation for existing lead with sys_id = " + lead.sys_id + " with lead number " + lead.number, false);
+    this._log("Existing lead with following status = " + lead.lead_status + " oldLeadStatus " + oldLeadStatus);
+    var assinged_to;
+
+    if (this._automationEnabled) {
+      this._log("Existing lead with following status = " + lead.lead_status + " oldLeadStatus " + oldLeadStatus);
+      var newLeadStatus = lead.lead_status + '';
+      try {
+        if (JSUtil.notNil(lead)) {
+
+          if (this._leadStatusALogic.indexOf(oldLeadStatus.toString()) > -1 && newLeadStatus === this._constants.OPEN) {
+            this._log("Running logic A for lead " + lead.sys_id, false);
+
+            if (this._checkAssignedToAndPlay(lead)) {
+              this._log("logic A :Lead not having Assigned to with Valid GDC play and GDC Area..  " + lead.sys_id, false);
+			  //STRY0785655 If ELOQUA assigned to is present, then assign lead to ELOQUA assigned to.
+			  if(JSUtil.notNil(eloquaAssignedTo) && EloquaLeadMappingUtil.isServiceNowUser(eloquaAssignedTo)){
+				  this._log("logic A :eloquaAssignedTo is present and valid employee . Assigning it to lead  " + lead.sys_id, false);
+				  var user = EloquaLeadMappingUtil.isServiceNowUser(eloquaAssignedTo);
+				  assinged_to = user.sys_id;
+				  lead.u_lead_assigned_using = LeadConstants.LEAD_ASSIGNED_USING_ELOQUA;
+				}else{
+				  assinged_to = this.checkNewLead(lead, account);
+			  }
+              //assinged_to = this._deriveAreaAndPlay(lead, account, false);
+            } else {
+              this._log("logic A :Lead having Assigned to with Valid GDC play and GDC Area .. will assign the lead to same assigned to" + lead.sys_id, false);
+              assinged_to = lead.assigned_to;
+            }
+
+          } else if (this._leadStatusBLogic.indexOf(oldLeadStatus.toString()) > -1 && newLeadStatus === this._constants.OPEN) {
+            this._log("Running logic B for lead " + lead.sys_id, false);
+			  if(JSUtil.notNil(eloquaAssignedTo) && EloquaLeadMappingUtil.isServiceNowUser(eloquaAssignedTo)){
+				  this._log("logic B :eloquaAssignedTo is present and valid employee . Assigning it to lead  " + lead.sys_id, false);
+				  var userB = EloquaLeadMappingUtil.isServiceNowUser(eloquaAssignedTo);
+				  assinged_to = userB.sys_id;
+				  lead.u_lead_assigned_using = LeadConstants.LEAD_ASSIGNED_USING_ELOQUA;
+				}else{
+
+             assinged_to = this.checkNewLead(lead, account);
+            //assinged_to = this._deriveAreaAndPlay(lead, account, false);
+				}
+          }
+        } else {
+          this._log('Lead Assignment Automation will not run for null lead object ' + lead.sys_id, false);
+          assinged_to = null;
+        }
+      } catch (error) {
+        this._log("Error occured while procesisng Lead automation logic  " + error.message + " for lead with sys_id " + lead.sys_id, true);
+        assinged_to = null;
+      }
+    } else {
+      this._log("Skipping Lead automation logic.. Automation flag is not enabled [adr.automation.enabled] " + lead.sys_id, false);
+      assinged_to = null;
+    }
+
+    return assinged_to;
+  },
+  checkNewLead: function(lead, account) {
+
+    var assinged_to;
+    try {
+      this._log(" Running Lead Assignment Automation for lead with sys_id " + lead.sys_id + "  and lead number = " + lead.number, false);
+      if (JSUtil.notNil(lead)) {
+        this._log("Lead is not null " + lead.sys_id);
+
+        if (JSUtil.notNil(account) && JSUtil.notNil(account.inside_sales_rep) && account.inside_sales_rep.active) {
+          this._log(" Account is not null and sales rep is existed and active." + lead.sys_id, false);
+			this._log("account is not null " + account.sys_id +' : isAccountInSameCountryOrPartnerAndMSP' +MKTUtil.isAccountInSameCountryOrPartnerAndMSP(account,lead)+ '   '+lead.sys_id);
+
+			var isAccountInSameCountryOrPartnerAndMSP = MKTUtil.isAccountInSameCountryOrPartnerAndMSP(account,lead);
+
+			if(isAccountInSameCountryOrPartnerAndMSP) {
+
+		  this._log("isAccountInSameCountryOrPartnerAndMSP " + isAccountInSameCountryOrPartnerAndMSP + lead.sys_id);
+          this._log(" Account is not null and sales rep is existed and active and account/lead are in same county or Account is a partner or MSP.. No RoundRobin logic for lead  " + lead.sys_id, false);
+
+          assinged_to = account.inside_sales_rep;
+          lead.u_lead_assigned_using = LeadConstants.LEAD_ASSIGNED_USING_ACCOUNT_ADR;
+          lead.u_adr_assigned_date = gs.nowDateTime();
+          this._log(" Updating Lead Assigned Using with " + lead.u_lead_assigned_using + " for lead with sys_id " + lead.sys_id, false);
+
+        }
+	  }
+		else {
+          this._log(" checking account is not null condition  " + lead.sys_id);
+          if (JSUtil.nil(account)) {
+            this._log(" Account is null for new lead " + lead.sys_id + " No 90 days logic is false ", false);
+            assinged_to = this._deriveAreaAndPlay(lead, account, false);
+          } else if (JSUtil.nil(account.inside_sales_rep)) {
+            this._log(" Account is not null and no inside sales rep account  " + lead.sys_id + " No 90 days logic will apply ", false);
+            assinged_to = this._deriveAreaAndPlay(lead, account, true); // Need to pass additional parameter to include 90 days logic
+          } else if (JSUtil.notNil(account.inside_sales_rep) && !account.inside_sales_rep.active) {
+            this._log(" Account  and inside sales rep are not null and sales rep is not active " + lead.sys_id + " 90 days logic will apply ", false);
+            assinged_to = this._deriveAreaAndPlay(lead, account, true);
+          }
+        }
+      } else {
+        this._log("Lead Assignment Automation will not run for null lead object", false);
+        assinged_to = null;
+      }
+    } catch (ex) {
+      this._log(" Exception occured while processing new Lead with Automation " + ex, true);
+    }
+    return assinged_to;
+  },
+  type: 'LeadAutomationUtil'
+};
+]]></script>
+        <sys_class_name>sys_script_include</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2018-11-29 04:33:33</sys_created_on>
+        <sys_id>d7873ef14fce23009d3ea3618110c707</sys_id>
+        <sys_mod_count>1</sys_mod_count>
+        <sys_name>LeadAutomationUtil</sys_name>
+        <sys_package display_value="super search" source="x_snc_super_search">4863b5fddbc52740ba189ea3db961925</sys_package>
+        <sys_policy>read</sys_policy>
+        <sys_scope display_value="super search">4863b5fddbc52740ba189ea3db961925</sys_scope>
+        <sys_update_name>sys_script_include_d7873ef14fce23009d3ea3618110c707</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2018-11-29 04:35:05</sys_updated_on>
+    </sys_script_include>
+</record_update>

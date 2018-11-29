@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_angular_provider">
+    <sp_angular_provider action="INSERT_OR_UPDATE">
+        <name>loaderService</name>
+        <script><![CDATA[function loaderService() {
+	
+	var sanckBarDom = '';
+
+    var getLoaderText = function(text) {
+          var loaderHtml = '<div class="km-overlay">'+
+           ' <div class="km-modal km-vertical" id="modal">'+
+              '<div class="km-modal-content">'+
+                '<div class="km-loader"> </div>'+
+                '<div class="km-loading-text">'+  text +' </div>'+
+              '</div>'+
+            '</div>'+
+          '</div>';
+          return loaderHtml;
+      }; 
+	
+	  var addsnackDOM = function() {
+		  sanckBarDom = document.createElement('div');
+          sanckBarDom.setAttribute("id","snack-over-lay-div");
+          document.body.appendChild(sanckBarDom);
+	  };
+	
+      var showLoader = function(text) {
+          var nodeEle = document.createElement('div');
+          nodeEle.setAttribute("id","km-over-lay");
+          nodeEle.innerHTML = getLoaderText(text||'Loading...');
+          document.body.appendChild(nodeEle);
+      };
+
+      var removeLoader = function() {
+          var elem = document.getElementById("km-over-lay");
+          document.body.removeChild(elem);
+      };
+	
+	 var checkNotificationContainer = function(id) {
+		 var ele = document.getElementById(id);
+		 return ele;
+	 };
+	
+	var showMessage = function(message, id) {
+		var messageHtml = '<div class="snackbar"> <div class="icon"> <i class="fa fa-check shadow" aria-hidden="true"></i></div>  <div class="info">\n'+ message +'</div></div>';
+		var nodeEle = document.createElement('div');
+		id = "snack-over-lay-"+id;
+		console.log(id);
+          nodeEle.setAttribute("id",id);
+          nodeEle.innerHTML = messageHtml;
+          //document.body.appendChild(nodeEle);	
+		  sanckBarDom.appendChild(nodeEle);	
+		
+		setTimeout(function(id) {
+			return function() {
+				var elem = document.getElementById(id);
+				//document.body.removeChild(elem);
+				sanckBarDom.removeChild(elem);
+			};
+		}(id),6000);
+	};	
+	
+	addsnackDOM();
+	
+    return {
+      showLoader:showLoader,
+      removeLoader:removeLoader,
+	  showMessage:showMessage
+    };
+}
+]]></script>
+        <sys_class_name>sp_angular_provider</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2018-11-29 07:20:05</sys_created_on>
+        <sys_id>269d57bd4f0263009d3ea3618110c7a9</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>loaderService</sys_name>
+        <sys_package display_value="super search" source="x_snc_super_search">4863b5fddbc52740ba189ea3db961925</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="super search">4863b5fddbc52740ba189ea3db961925</sys_scope>
+        <sys_update_name>sp_angular_provider_269d57bd4f0263009d3ea3618110c7a9</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2018-11-29 07:20:05</sys_updated_on>
+        <type>factory</type>
+    </sp_angular_provider>
+</record_update>

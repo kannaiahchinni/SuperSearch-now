@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<record_update table="m2m_sp_widget_dependency">
+<?xml version="1.0" encoding="UTF-8"?><record_update table="m2m_sp_widget_dependency">
     <m2m_sp_widget_dependency action="INSERT_OR_UPDATE">
         <sp_dependency display_value="testjslib">8662218adbd92700c3ab36cb7c961931</sp_dependency>
         <sp_widget display_value="testrnwidget">da31654adbd92700c3ab36cb7c9619d9</sp_widget>

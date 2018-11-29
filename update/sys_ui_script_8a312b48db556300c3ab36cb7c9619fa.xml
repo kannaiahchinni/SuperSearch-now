@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<record_update table="sys_ui_script">
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_ui_script">
     <sys_ui_script action="INSERT_OR_UPDATE">
         <active>true</active>
         <description/>
@@ -2103,6 +2102,7 @@ window&&(window.module&&"object"===typeof window.module&&"object"===typeof windo
         <sys_update_name>sys_ui_script_8a312b48db556300c3ab36cb7c9619fa</sys_update_name>
         <sys_updated_by>ritwik</sys_updated_by>
         <sys_updated_on>2018-10-17 14:20:04</sys_updated_on>
+        <ui_type/>
         <use_scoped_format>false</use_scoped_format>
     </sys_ui_script>
 </record_update>

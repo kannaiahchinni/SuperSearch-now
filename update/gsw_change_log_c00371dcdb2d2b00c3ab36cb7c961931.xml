@@ -1,8 +1,7 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<record_update table="gsw_change_log">
+<?xml version="1.0" encoding="UTF-8"?><record_update table="gsw_change_log">
     <gsw_change_log action="INSERT_OR_UPDATE">
         <change_date>2018-10-30 11:11:15</change_date>
-        <changed_by display_value="ritwik ritwik">b9c8c36bdb7d1f00c3ab36cb7c9619d5</changed_by>
+        <changed_by display_value="Ritwik Ritwik">a5ca22794f8e23009d3ea3618110c7de</changed_by>
         <content display_value="Validate MID">d2d157dac39312007bf1bea192d3aea6</content>
         <related_change_log_entry/>
         <related_task_entry/>

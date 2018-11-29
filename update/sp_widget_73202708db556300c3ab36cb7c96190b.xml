@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<record_update table="sp_widget">
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_widget">
     <sp_widget action="INSERT_OR_UPDATE">
         <category>custom</category>
-        <client_script><![CDATA[function($scope) {
+        <client_script><![CDATA[function($scope,$location,loaderService) {
 	/* widget controller */
+	$scope.showTree = false;
 	var c = this;
 	c.dataJson = $scope.data.dataJson;
 	c.noData='notLoaded';
@@ -83,6 +83,12 @@
 						
 					};
 	
+	
+				$scope.showRecord = function(node) {
+					 console.log($location.host());
+					 var url = 'https://'+$location.host()+"/sys_script_include.do?sys_id="+node.sys_id;
+					 window.open(url,'_blank');
+				};
 					c.search = function(e){
 						
 						if (e && e.keyCode != 13) {
@@ -93,10 +99,13 @@
 							alert('enter a script include and method name to search');
 							return;
 						}
+						loaderService.showLoader();
 						var input ={'searchStr':c.searchStr};
 							c.server.get(input).then(function(r){
 								c.dataJson = r.data.dataJson;
+								c.stackJson = r.data.callStack;
 								console.log(JSON.stringify(c.dataJson));
+								console.log(c.stackJson);
 								if(c.dataJson){
 									c.noData = 'loaded';
 								}else{
@@ -104,7 +113,7 @@
 								}
 								console.log(c.noData);
 								c.init();
-								
+								loaderService.removeLoader();
 							});
 							
 						};
@@ -112,16 +121,83 @@
 						
 					}]]></client_script>
         <controller_as>c</controller_as>
-        <css>.center {&#13;
-	text-align:center;&#13;
-  color: gray;&#13;
-}&#13;
-.btn {&#13;
-    background-color: #f8f8f8;&#13;
-}&#13;
-.left {&#13;
-	text-align: left;&#13;
-}</css>
+        <css>.center {
+	text-align:center;
+  color: #293e40;
+}
+.btn {
+    background-color: #f8f8f8;
+}
+.left {
+	text-align: left;
+}
+
+.flex-container {
+ 	display:flex;
+  flex-direction:row;
+  justify-content:space-around;
+  
+}
+.callStack {
+ 	 width:30%; 
+}
+.fow-tree {
+ 	 width:69%; 
+}
+
+.indicator {
+ 	color:#333; 
+}
+
+body {
+  margin: 30px;
+  font-family: sans-serif;
+  }
+
+.search-button {
+ 	 background-color:#293e40 !important;
+   color:#fff;
+  	border:1px solid #293e40;
+}
+.search-box:focus {
+ 	  border: 1px solid #293e40;
+}
+.search-box {
+ 	border:1px solid #293e40; 
+}
+
+#fontSizeWrapper { font-size: 16px; }
+
+#fontSize {
+  width: 100px;
+  font-size: 1em;
+  }
+
+
+
+.km-overlay{display:block;position:fixed;top:0;left:0;height:100%;width:100%;z-index:100000;background-color:rgba(0,0,0,.5)}.km-modal{box-shadow:0 3px 11px 0 #9E9E9E;height:100px;padding:20px;background:#FFF;border-radius:10px;width:200px}.km-loader{border:10px solid #646464;border-top:10px solid #81B5A1;border-bottom:10px solid #81B5A1;border-radius:50%;width:50px;height:50px;animation:spin 1s linear infinite;}@keyframes spin{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}.km-vertical{left:0;bottom:0;top:0;right:0;margin:auto;position:absolute}
+.km-loading-text { 
+    padding:10px;
+    font-size:18px;
+}
+.km-modal-content {
+   display: flex;
+   flex-direction: row;
+   justify-content: space-between;
+   margin-top: 5%;
+   vertical-align: middle;
+   align-items: center;
+}
+.link {
+ 	 color:blue; 
+}
+.link:hover {
+  	color:#293e40;
+  	font-size:15px;
+}
+
+
+</css>
         <data_table>sp_instance</data_table>
         <demo_data/>
         <description/>
@@ -153,6 +229,7 @@ if(input && input.searchStr){
 	var searchInp = input.searchStr;
 		
 	data.dataJson = x.sctSearch(searchInp);
+	data.callStack = x.stackJson(searchInp);
 	
 	//gs.addInfoMessage(JSON.stringify(resultJson));
 		//return JSON.stringify(resultJson);
@@ -163,17 +240,25 @@ if(input && input.searchStr){
         <sys_created_by>ritwik</sys_created_by>
         <sys_created_on>2018-10-17 14:17:03</sys_created_on>
         <sys_id>73202708db556300c3ab36cb7c96190b</sys_id>
-        <sys_mod_count>57</sys_mod_count>
+        <sys_mod_count>125</sys_mod_count>
         <sys_name>SCTTree</sys_name>
         <sys_package display_value="super search" source="x_snc_super_search">4863b5fddbc52740ba189ea3db961925</sys_package>
         <sys_policy/>
         <sys_scope display_value="super search">4863b5fddbc52740ba189ea3db961925</sys_scope>
         <sys_update_name>sp_widget_73202708db556300c3ab36cb7c96190b</sys_update_name>
-        <sys_updated_by>ritwik</sys_updated_by>
-        <sys_updated_on>2018-10-29 09:07:03</sys_updated_on>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2018-11-29 07:34:26</sys_updated_on>
         <template><![CDATA[<div class="container">
-  <h1 class="center">Super Search</h1>
-    <div class="form-group">
+  <h1 class="center">Super Search ( Code Call Stack )</h1>
+  <div class="input-group">
+  <input type="text" class="form-control search-box" ng-model="c.searchStr" placeholder="ScriptName.MethodName" aria-describedby="basic-addon2">
+  <span class="input-group-addon search-button " id="basic-addon2" ng-click="c.search()">Search Stacks</span>
+    
+</div>
+  <label class="control-label col-sm-12 left" >e.g.: To search "findArticle" method in "KnowledgeHelp" script include, enter "KnowledgeHelp.findArticle"</label>
+  
+  
+   <!-- <div class="form-group">
       <div class="col-sm-12">
         <input type="text" class="form-control" ng-model="c.searchStr">
       	<label class="control-label col-sm-12 left" >e.g.: To search "findArticle" method in "KnowledgeHelp" script include, enter "KnowledgeHelp.findArticle"</label>
@@ -184,11 +269,54 @@ if(input && input.searchStr){
       <div class="col-sm-12 center">
         <button type="submit" class="btn btn-default" ng-click="c.search()" onkeypress="c.search(event)">Search</button>
       </div>
-    </div>
+    </div>  -->
 </div>
 <br>
-<div id="myDiagramDiv" ng-show="c.noData=='loaded'"  style="border: solid 1px black; width: 100%; height: 500px;padding: 10px;"></div>
-<div id="noData" ng-show="c.noData=='noData'" style="border: solid 1px black; width: 100%;text-align: center;padding: 10px;">The method/script inlcude <b>{{c.searchStr}}</b> not called anywhere</div>
+
+
+
+<script type="text/ng-template" id="nodes_renderer.html">
+  <div ui-tree-handle class="tree-node tree-node-content">
+    <a class="indicator" ng-if="node.nodes && node.nodes.length > 0" data-nodrag ng-click="toggle(this)"><span
+        class="glyphicon"
+        ng-class="{
+          'glyphicon-chevron-right': collapsed,
+          'glyphicon-chevron-down': !collapsed
+        }"></span></a>
+     <span class="link" ng-click="showRecord(node)"> {{node.title}} </span>
+  </div>
+  <ol ui-tree-nodes="" ng-model="node.nodes" ng-class="{hidden: collapsed}">
+    <li ng-repeat="node in node.nodes" ui-tree-node ng-include="'nodes_renderer.html'">
+    </li>
+  </ol>
+</script>
+
+
+
+<div class="flex-container">
+  
+  <div class="callStack" >
+    	<div class="row">
+  <div class="col-sm-6">
+    <div ui-tree data-drag-enabled="false" id="tree-root">
+      <ol ui-tree-nodes ng-model="c.stackJson.nodes">
+        <li ng-repeat="node in c.stackJson.nodes" ui-tree-node ng-include="'nodes_renderer.html'"></li>
+      </ol>
+    </div>
+  </div>
+</div>
+  </div>
+  
+  <div class="fow-tree">
+     <div id="myDiagramDiv" ng-show="c.noData=='loaded'"  style="border: solid 1px black; width: 100%; height: 500px;padding: 10px;"></div>
+			<div id="noData" ng-show="c.noData=='noData'" style="border: solid 1px black; width: 100%;text-align: center;padding: 10px;">The method/script inlcude <b>{{c.searchStr}}</b> not called anywhere</div>
+  </div>
+  
+</div>
+
+
+
+
 ]]></template>
     </sp_widget>
 </record_update>

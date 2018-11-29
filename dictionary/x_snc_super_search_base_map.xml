@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<database>
+<?xml version="1.0" encoding="UTF-8"?><database>
     <element label="Base Map" max_length="40" name="x_snc_super_search_base_map" type="collection">
         <element label="Artifact" max_length="80" name="artifact_name" type="string"/>
         <element label="Artifact Sys ID" max_length="32" name="artifact_sys_id" type="string"/>

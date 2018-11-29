@@ -1,9 +1,8 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<record_update table="gsw_change_log">
+<?xml version="1.0" encoding="UTF-8"?><record_update table="gsw_change_log">
     <gsw_change_log action="INSERT_OR_UPDATE">
         <change_date>2018-10-30 10:36:37</change_date>
-        <changed_by display_value="ritwik ritwik">b9c8c36bdb7d1f00c3ab36cb7c9619d5</changed_by>
-        <content display_value="Auto-Assign MID Server IP Ranges">bf6daef6c3d432007bf1bea192d3aed9</content>
+        <changed_by display_value="Ritwik Ritwik">a5ca22794f8e23009d3ea3618110c7de</changed_by>
+        <content display_value="">bf6daef6c3d432007bf1bea192d3aed9</content>
         <related_change_log_entry/>
         <related_task_entry/>
         <sys_class_name>gsw_change_log</sys_class_name>

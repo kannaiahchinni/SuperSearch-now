@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_dependency">
+    <sp_dependency action="INSERT_OR_UPDATE">
+        <module/>
+        <name>angular ui tree</name>
+        <page_load>true</page_load>
+        <sp_portals>b0ab7ab54fce23009d3ea3618110c76b</sp_portals>
+        <sys_class_name>sp_dependency</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2018-11-29 06:01:01</sys_created_on>
+        <sys_id>ba9b47714f0263009d3ea3618110c755</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>angular ui tree</sys_name>
+        <sys_package display_value="super search" source="x_snc_super_search">4863b5fddbc52740ba189ea3db961925</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="super search">4863b5fddbc52740ba189ea3db961925</sys_scope>
+        <sys_update_name>sp_dependency_ba9b47714f0263009d3ea3618110c755</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2018-11-29 06:01:01</sys_updated_on>
+    </sp_dependency>
+</record_update>
