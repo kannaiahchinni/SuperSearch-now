@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sp_widget">
+    <sp_widget action="INSERT_OR_UPDATE">
+        <category>custom</category>
+        <client_script><![CDATA[function() {
+  /* widget controller */
+  var c = this;
+
+	c.saveToDb = function(){		
+		c.server.get({siName:c.siName+'',siTree:c.siTree+''});
+		
+	};
+}]]></client_script>
+        <controller_as>c</controller_as>
+        <css/>
+        <data_table>sp_instance</data_table>
+        <demo_data/>
+        <description/>
+        <docs/>
+        <field_list/>
+        <has_preview>true</has_preview>
+        <id>sct-load-tree</id>
+        <internal>false</internal>
+        <link/>
+        <name>SCTLoadTree</name>
+        <option_schema/>
+        <public>false</public>
+        <roles/>
+        <script><![CDATA[(function() {
+  /* populate the 'data' object */
+  /* e.g., data.table = $sp.getValue('table'); */
+
+	if(input){
+		if(input.siName && input.siTree){
+				//validate script include
+			
+			var sciGr = new GlideRecord('sys_script_include');
+			sciGr.addQuery('name',input.siName +'');
+			sciGr.query();
+			
+			if(sciGr.next()){
+				//claear existing data
+				var treeGr = new GlideRecord('x_snc_super_search_base_map');
+				treeGr.addQuery('artifact_sys_id',sciGr.sys_id+'');
+				treeGr.query();
+				treeGr.deleteMultiple();
+				
+				//add new data
+				try{
+					var tree = JSON.parse(input.siTree);
+					for (var method in tree) {
+							if (tree.hasOwnProperty(method)) {
+								var stackStrace = tree[method];
+								if(stackStrace.length>0){
+									//insert new tree record
+									var newTreeGr = new GlideRecord('x_snc_super_search_base_map');
+									newTreeGr.initialize();
+									newTreeGr.artifact_sys_id = sciGr.sys_id+'';//sysid
+									newTreeGr.artifact_name = sciGr.name;//name
+									newTreeGr.child_artifact = method;//method
+									newTreeGr.method = stackStrace+',';//stack trace coming form link
+									newTreeGr.search_token = sciGr.name+'.'+method;//name.method
+									
+									newTreeGr.insert();
+								}
+							}
+					}
+					gs.addInfoMessage('Tree created successfully');
+				}catch(e){
+					gs.addErrorMessage('Entered tree structure is wrong'+e);
+				}
+			}else{
+				gs.addErrorMessage("Couldn't find the script include");
+			}
+		}
+	}
+	
+})();]]></script>
+        <servicenow>false</servicenow>
+        <sys_class_name>sp_widget</sys_class_name>
+        <sys_created_by>ritwik</sys_created_by>
+        <sys_created_on>2018-10-17 09:25:04</sys_created_on>
+        <sys_id>028dde84dbd16300c3ab36cb7c96198d</sys_id>
+        <sys_mod_count>22</sys_mod_count>
+        <sys_name>SCTLoadTree</sys_name>
+        <sys_package display_value="super search" source="x_snc_super_search">4863b5fddbc52740ba189ea3db961925</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="super search">4863b5fddbc52740ba189ea3db961925</sys_scope>
+        <sys_update_name>sp_widget_028dde84dbd16300c3ab36cb7c96198d</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2018-10-29 07:58:51</sys_updated_on>
+        <template><![CDATA[<div class="container">
+  <h2>Submit Script include tree code</h2>
+  <form class="form-horizontal">
+    <div class="form-group">
+      <label class="control-label col-sm-2" >Script Include Name</label>
+      <div class="col-sm-10">
+        <input type="text" class="form-control" ng-model="c.siName" 
+               placeholder="Enter script include name">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-sm-2">Code Tree</label>
+      <div class="col-sm-10">          
+        <textarea class="form-control" ng-model="c.siTree" rows="10" 
+                  placeholder="Enter script include tree structure"></textarea>
+      </div>
+    </div>
+    <div class="form-group">        
+      <div class="col-sm-offset-2 col-sm-10">
+        <button type="submit" class="btn btn-default" ng-click="c.saveToDb()">Submit</button>
+      </div>
+    </div>
+  </form>
+</div>]]></template>
+    </sp_widget>
+</record_update>

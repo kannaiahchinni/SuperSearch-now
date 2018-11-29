@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sys_ui_page">
+    <sys_ui_page action="INSERT_OR_UPDATE">
+        <category>general</category>
+        <client_script><![CDATA[var searchTree = function(){
+	var searchString = document.getElementById('searchstr').value;
+	console.log('searchString: '+searchString);
+	var tree = new GlideAjax('BaseTableSearchAjax');
+	tree.addParam('sysparm_name','searchmethod');
+	tree.addParam('sysparm_searchstr',searchString);
+	tree.getXMLWait(); 
+	alert(tree.getAnswer());
+	
+};]]></client_script>
+        <description/>
+        <direct>false</direct>
+        <endpoint>x_snc_super_search_supersearch.do</endpoint>
+        <html><![CDATA[<?xml version="1.0" encoding="utf-8" ?>
+<j:jelly trim="false" xmlns:j="jelly:core" xmlns:g="glide" xmlns:j2="null" xmlns:g2="null">
+<style>
+.center {
+	text-align:center;
+}
+</style>
+			<table id="container_table">
+				<div class="container">
+					<div class="panel">
+						<div class="panel-body col-md-12">
+								
+								<div class="asset-row">
+									<div class="center">
+										<h1>Super Search</h1>
+									</div>
+									<div class="col-md-12">
+										
+										<input type="string" class="form-control" id="searchstr" name="searchstr" value="" onchange=""/>
+									<p>e.g.: To search "findArticle" method in "KnowledgeHelp" script include, enter "KnowledgeHelp.findArticle"</p>
+									</div>
+										
+
+							
+								</div>
+						</div>
+					</div>
+				</div>
+				<div class="center">
+					<g:dialog_button onclick="searchTree();" name="searchTree" id="searchTree">search Tree</g:dialog_button>
+					<g:dialog_button disabled="true" onclick="searchEndPoint();" name="searchEndPoint" id="search End Point">search End Point</g:dialog_button>
+				</div>
+			</table>
+	
+	
+	
+</j:jelly>]]></html>
+        <name>supersearch</name>
+        <processing_script/>
+        <sys_class_name>sys_ui_page</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2018-10-16 21:30:02</sys_created_on>
+        <sys_id>b24a377bdbcd2300ba189ea3db96190d</sys_id>
+        <sys_mod_count>23</sys_mod_count>
+        <sys_name>supersearch</sys_name>
+        <sys_package display_value="super search" source="x_snc_super_search">4863b5fddbc52740ba189ea3db961925</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="super search">4863b5fddbc52740ba189ea3db961925</sys_scope>
+        <sys_update_name>sys_ui_page_b24a377bdbcd2300ba189ea3db96190d</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2018-10-16 22:55:43</sys_updated_on>
+    </sys_ui_page>
+</record_update>

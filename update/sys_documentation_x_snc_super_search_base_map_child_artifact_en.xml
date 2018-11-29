@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update>
+    <sys_documentation element="child_artifact" label="Artifact Method" language="en" table="x_snc_super_search_base_map">
+        <sys_documentation action="INSERT_OR_UPDATE">
+            <element>child_artifact</element>
+            <help/>
+            <hint/>
+            <label>Artifact Method</label>
+            <language>en</language>
+            <name>x_snc_super_search_base_map</name>
+            <plural>Artifact Methods</plural>
+            <sys_class_name>sys_documentation</sys_class_name>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2018-10-10 07:03:38</sys_created_on>
+            <sys_id>618a39f5db092740ba189ea3db96197a</sys_id>
+            <sys_mod_count>1</sys_mod_count>
+            <sys_name>Artifact Method</sys_name>
+            <sys_package display_value="super search" source="x_snc_super_search">4863b5fddbc52740ba189ea3db961925</sys_package>
+            <sys_policy/>
+            <sys_scope display_value="super search">4863b5fddbc52740ba189ea3db961925</sys_scope>
+            <sys_update_name>sys_documentation_x_snc_super_search_base_map_child_artifact_en</sys_update_name>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2018-10-17 07:13:49</sys_updated_on>
+            <url/>
+            <url_target/>
+        </sys_documentation>
+    </sys_documentation>
+</record_update>

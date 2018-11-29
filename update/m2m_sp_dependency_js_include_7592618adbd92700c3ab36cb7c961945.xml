@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="m2m_sp_dependency_js_include">
+    <m2m_sp_dependency_js_include action="INSERT_OR_UPDATE">
+        <order>100</order>
+        <sp_dependency display_value="testjslib">8662218adbd92700c3ab36cb7c961931</sp_dependency>
+        <sp_js_include display_value="">1f82618adbd92700c3ab36cb7c961997</sp_js_include>
+        <sys_class_name>m2m_sp_dependency_js_include</sys_class_name>
+        <sys_created_by>ritwik</sys_created_by>
+        <sys_created_on>2018-10-23 10:13:14</sys_created_on>
+        <sys_id>7592618adbd92700c3ab36cb7c961945</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>testjslib.</sys_name>
+        <sys_package display_value="super search" source="x_snc_super_search">4863b5fddbc52740ba189ea3db961925</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="super search">4863b5fddbc52740ba189ea3db961925</sys_scope>
+        <sys_update_name>m2m_sp_dependency_js_include_7592618adbd92700c3ab36cb7c961945</sys_update_name>
+        <sys_updated_by>ritwik</sys_updated_by>
+        <sys_updated_on>2018-10-23 10:13:14</sys_updated_on>
+    </m2m_sp_dependency_js_include>
+</record_update>

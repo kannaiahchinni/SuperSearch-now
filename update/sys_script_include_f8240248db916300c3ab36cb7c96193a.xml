@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sys_script_include">
+    <sys_script_include action="INSERT_OR_UPDATE">
+        <access>package_private</access>
+        <active>true</active>
+        <api_name>x_snc_super_search.SCT_SI_8</api_name>
+        <client_callable>false</client_callable>
+        <description/>
+        <name>SCT_SI_8</name>
+        <script><![CDATA[var SCT_SI_8 = Class.create();
+SCT_SI_8.prototype = {
+    initialize: function() {
+    },
+
+	
+	method1: function(){
+		var si2 = new SCT_SI_2();
+		si2.method1();
+	},
+	
+    type: 'SCT_SI_8'
+};]]></script>
+        <sys_class_name>sys_script_include</sys_class_name>
+        <sys_created_by>ritwik</sys_created_by>
+        <sys_created_on>2018-10-17 07:32:15</sys_created_on>
+        <sys_id>f8240248db916300c3ab36cb7c96193a</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>SCT_SI_8</sys_name>
+        <sys_package display_value="super search" source="x_snc_super_search">4863b5fddbc52740ba189ea3db961925</sys_package>
+        <sys_policy>read</sys_policy>
+        <sys_scope display_value="super search">4863b5fddbc52740ba189ea3db961925</sys_scope>
+        <sys_update_name>sys_script_include_f8240248db916300c3ab36cb7c96193a</sys_update_name>
+        <sys_updated_by>ritwik</sys_updated_by>
+        <sys_updated_on>2018-10-17 07:32:15</sys_updated_on>
+    </sys_script_include>
+</record_update>

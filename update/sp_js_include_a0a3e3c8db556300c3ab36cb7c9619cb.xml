@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sp_js_include">
+    <sp_js_include action="INSERT_OR_UPDATE">
+        <display_name>gojs</display_name>
+        <source>local</source>
+        <sys_class_name>sp_js_include</sys_class_name>
+        <sys_created_by>ritwik</sys_created_by>
+        <sys_created_on>2018-10-17 14:29:28</sys_created_on>
+        <sys_id>a0a3e3c8db556300c3ab36cb7c9619cb</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>gojs</sys_name>
+        <sys_package display_value="super search" source="x_snc_super_search">4863b5fddbc52740ba189ea3db961925</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="super search">4863b5fddbc52740ba189ea3db961925</sys_scope>
+        <sys_ui_script display_value="x_snc_super_search.sctgo">8a312b48db556300c3ab36cb7c9619fa</sys_ui_script>
+        <sys_update_name>sp_js_include_a0a3e3c8db556300c3ab36cb7c9619cb</sys_update_name>
+        <sys_updated_by>ritwik</sys_updated_by>
+        <sys_updated_on>2018-10-17 14:29:28</sys_updated_on>
+        <url/>
+    </sp_js_include>
+</record_update>

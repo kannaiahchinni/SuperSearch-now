@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sp_widget">
+    <sp_widget action="INSERT_OR_UPDATE">
+        <category>custom</category>
+        <client_script><![CDATA[function($scope) {
+	/* widget controller */
+	var c = this;
+	c.dataJson = $scope.data.dataJson;
+	c.noData='notLoaded';
+	c.searchStr = '';
+	c.init = function() {
+		  // init for these samples -- you don't need to call this
+			var $ = go.GraphObject.make;  // for conciseness in defining templates
+		
+		if(typeof myDiagram !== 'undefined')
+			myDiagram.div = null;
+		myDiagram =
+		$(go.Diagram, "myDiagramDiv",  // must name or refer to the DIV HTML element
+		{
+			// start everything in the middle of the viewport
+			initialContentAlignment: go.Spot.Center,
+			// have mouse wheel events zoom in and out instead of scroll up and down
+			"toolManager.mouseWheelBehavior": go.ToolManager.WheelZoom,
+			// enable undo & redo
+			"undoManager.isEnabled": true
+		});
+		
+		// define the Node template
+		myDiagram.nodeTemplate =
+		$(go.Node, "Auto",
+		new go.Binding("location", "loc", go.Point.parse).makeTwoWay(go.Point.stringify),
+		// define the node's outer shape, which will surround the TextBlock
+		$(go.Shape, "RoundedRectangle",
+		{
+			parameter1: 20,  // the corner has a large radius
+			fill: $(go.Brush, "Linear", { 0: "rgb(254, 201, 0)", 1: "rgb(254, 162, 0)" }),
+				stroke: null,
+				portId: "",  // this Shape is the Node's port, not the whole Node
+				fromLinkable: true, fromLinkableSelfNode: true, fromLinkableDuplicates: true,
+				toLinkable: true, toLinkableSelfNode: true, toLinkableDuplicates: true,
+				cursor: "pointer",
+				width:250
+			}),
+			$(go.TextBlock,
+			{
+				font: "bold 11pt helvetica, bold arial, sans-serif",
+				editable: true,  // editing the text automatically updates the model data
+				width:200
+			},
+			new go.Binding("text").makeTwoWay())
+			);
+			// unlike the normal selection Adornment, this one includes a Button
+			myDiagram.nodeTemplate.selectionAdornmentTemplate =
+			$(go.Adornment, "Spot",
+			$(go.Panel, "Auto",
+			$(go.Shape, { fill: null, stroke: "blue", strokeWidth: 2 }),
+				$(go.Placeholder)  // a Placeholder sizes itself to the selected Node
+				) // end button
+				); // end Adornment
+				
+				// replace the default Link template in the linkTemplateMap
+				myDiagram.linkTemplate =
+				$(go.Link,  // the whole link panel
+				{
+					curve: go.Link.Bezier, adjusting: go.Link.Stretch,
+					reshapable: true, relinkableFrom: true, relinkableTo: true,
+					toShortLength: 3
+				},
+				new go.Binding("points").makeTwoWay(),
+				new go.Binding("curviness"),
+				$(go.Shape,  // the link shape
+				{ strokeWidth: 1.5 }),
+					$(go.Shape,  // the arrowhead
+					{ toArrow: "standard", stroke: null })
+						
+						);
+		console.log(c.dataJson);
+		if(c.dataJson){
+			myDiagram.model = go.Model.fromJson(c.dataJson);
+		}
+						
+						
+						
+					};
+	
+					c.search = function(e){
+						
+						if (e && e.keyCode != 13) {
+							return;
+						}
+						console.log(c.searchStr);
+						if(c.searchStr==''){
+							alert('enter a script include and method name to search');
+							return;
+						}
+						var input ={'searchStr':c.searchStr};
+							c.server.get(input).then(function(r){
+								c.dataJson = r.data.dataJson;
+								console.log(JSON.stringify(c.dataJson));
+								if(c.dataJson){
+									c.noData = 'loaded';
+								}else{
+									c.noData = 'noData';
+								}
+								console.log(c.noData);
+								c.init();
+								
+							});
+							
+						};
+						//c.init();
+						
+					}]]></client_script>
+        <controller_as>c</controller_as>
+        <css>.center {&#13;
+	text-align:center;&#13;
+  color: gray;&#13;
+}&#13;
+.btn {&#13;
+    background-color: #f8f8f8;&#13;
+}&#13;
+.left {&#13;
+	text-align: left;&#13;
+}</css>
+        <data_table>sp_instance</data_table>
+        <demo_data/>
+        <description/>
+        <docs/>
+        <field_list/>
+        <has_preview>true</has_preview>
+        <id>sct-tree</id>
+        <internal>false</internal>
+        <link/>
+        <name>SCTTree</name>
+        <option_schema/>
+        <public>true</public>
+        <roles/>
+        <script><![CDATA[// (function() {
+//   /* populate the 'data' object */
+//   /* e.g., data.table = $sp.getValue('table'); */
+	
+// 	data.dataJson = new BaseTableSearchAjax().sctSearch('SCT_SI_4.method1')
+	
+// })();
+
+(function() {
+  /* populate the 'data' object */
+  /* e.g., data.table = $sp.getValue('table'); */
+if(input && input.searchStr){
+	//gs.addInfoMessage('started searching '+input.searchStr);
+	var x = new BaseTableSearchAjax();
+	var searchArray = [];
+	var searchInp = input.searchStr;
+		
+	data.dataJson = x.sctSearch(searchInp);
+	
+	//gs.addInfoMessage(JSON.stringify(resultJson));
+		//return JSON.stringify(resultJson);
+}
+})();]]></script>
+        <servicenow>false</servicenow>
+        <sys_class_name>sp_widget</sys_class_name>
+        <sys_created_by>ritwik</sys_created_by>
+        <sys_created_on>2018-10-17 14:17:03</sys_created_on>
+        <sys_id>73202708db556300c3ab36cb7c96190b</sys_id>
+        <sys_mod_count>57</sys_mod_count>
+        <sys_name>SCTTree</sys_name>
+        <sys_package display_value="super search" source="x_snc_super_search">4863b5fddbc52740ba189ea3db961925</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="super search">4863b5fddbc52740ba189ea3db961925</sys_scope>
+        <sys_update_name>sp_widget_73202708db556300c3ab36cb7c96190b</sys_update_name>
+        <sys_updated_by>ritwik</sys_updated_by>
+        <sys_updated_on>2018-10-29 09:07:03</sys_updated_on>
+        <template><![CDATA[<div class="container">
+  <h1 class="center">Super Search</h1>
+    <div class="form-group">
+      <div class="col-sm-12">
+        <input type="text" class="form-control" ng-model="c.searchStr">
+      	<label class="control-label col-sm-12 left" >e.g.: To search "findArticle" method in "KnowledgeHelp" script include, enter "KnowledgeHelp.findArticle"</label>
+      </div>
+    </div>
+
+    <div class="form-group">        
+      <div class="col-sm-12 center">
+        <button type="submit" class="btn btn-default" ng-click="c.search()" onkeypress="c.search(event)">Search</button>
+      </div>
+    </div>
+</div>
+<br>
+<div id="myDiagramDiv" ng-show="c.noData=='loaded'"  style="border: solid 1px black; width: 100%; height: 500px;padding: 10px;"></div>
+<div id="noData" ng-show="c.noData=='noData'" style="border: solid 1px black; width: 100%;text-align: center;padding: 10px;">The method/script inlcude <b>{{c.searchStr}}</b> not called anywhere</div>
+]]></template>
+    </sp_widget>
+</record_update>

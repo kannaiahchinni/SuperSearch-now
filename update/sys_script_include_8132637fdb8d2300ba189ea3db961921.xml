@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sys_script_include">
+    <sys_script_include action="INSERT_OR_UPDATE">
+        <access>public</access>
+        <active>true</active>
+        <api_name>x_snc_super_search.BaseTableSearchAjax</api_name>
+        <client_callable>true</client_callable>
+        <description/>
+        <name>BaseTableSearchAjax</name>
+        <script><![CDATA[var BaseTableSearchAjax = Class.create();
+BaseTableSearchAjax.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
+	
+	searchmethod: function(){
+		var searchArray = [];
+		var searchInp = this.getParameter('sysparm_searchstr');
+		
+		var resultJson = this.sctSearch(searchInp);
+		return JSON.stringify(resultJson);
+	},
+	
+	sctSearch:function(searchInp){
+		var resultArray = {"nodeKeyProperty": "id"};
+		var alreadySearched = [];
+		
+		var nodeDataArray = [];
+		var linkDataArray = [];
+		var levelCounter = 0;
+		var noOfLeaves = [];
+		this.searchString(searchInp, nodeDataArray, linkDataArray, alreadySearched, levelCounter, noOfLeaves);
+		if(linkDataArray.length>0){
+			this.calculateLoc(nodeDataArray, noOfLeaves);
+		
+			resultArray.nodeDataArray = nodeDataArray;
+			resultArray.linkDataArray = linkDataArray;
+			return resultArray;
+		}else{
+			return '';
+		}
+		
+	},
+	
+	calculateLoc: function(nodeDataArray, noOfLeaves){
+		//based on nodes noOfLeaves in array set locations
+		var maxNodesInOneLevel = Math.max.apply(null, noOfLeaves);
+		
+		var maxWidth = maxNodesInOneLevel*400;
+		var levelHeight = 120;
+		var hPositionArray = [];
+		for(var i=0;i<noOfLeaves.length; i++){
+			hPositionArray[i] = 1;
+		}
+	
+		for(i=0;i<nodeDataArray.length; i++){
+			var node = nodeDataArray[i];
+			var hLoc = maxWidth * (hPositionArray[node.levelCounter] / (noOfLeaves[node.levelCounter]+1));
+			var vLoc = levelHeight*(nodeDataArray[i].levelCounter+1);
+			nodeDataArray[i].loc=hLoc+" "+vLoc;
+			hPositionArray[nodeDataArray[i].levelCounter]++;
+		}
+	},
+	
+	searchString: function (searchInp, nodeDataArray, linkDataArray, alreadySearched, levelCounter, noOfLeaves) {
+		
+		if(alreadySearched.indexOf(searchInp)>-1){
+			return;
+		}
+		var gr = new GlideRecord('x_snc_super_search_base_map');
+		gr.addQuery('method', 'CONTAINS', searchInp + ',');
+		gr.query();
+		
+		alreadySearched.push(searchInp);
+		nodeDataArray.push({'id':searchInp, 'text':searchInp, 'levelCounter': levelCounter});
+		if(noOfLeaves.length<(levelCounter+1)){
+			noOfLeaves.push(1);
+		}else{
+			noOfLeaves[levelCounter]++;
+		}
+		
+		levelCounter++;
+		while (gr.next()) {
+			var treeObj = {
+				'from': searchInp + '',
+				'to': gr.search_token + '',
+				'curviness': 0
+			};
+			linkDataArray.push(treeObj);
+			this.searchString(gr.search_token + '', nodeDataArray, linkDataArray, alreadySearched, levelCounter, noOfLeaves);
+		}
+	},
+	
+	/*
+	
+function searchmethod()
+	{
+		var searchArray = [];
+var searchedArray = [];
+		var searchstr = 'SCT_SI_4.method1';
+		
+		searchArray.push(searchstr+'');
+		var finalResult = {};
+		iterateSearch(searchArray,finalResult,searchedArray);
+		
+		gs.info(JSON.stringify(finalResult));
+	}
+	
+
+	
+function iterateSearch(searchArray,finalResult,searchedArray){
+		var searchStr = searchArray[0];
+searchedArray.push(searchStr)
+		searchArray = searchArray.slice(1,searchArray.length);
+		var obj;
+
+		var gr = new GlideRecord('x_snc_super_search_base_map');
+		gr.addQuery('method','CONTAINS', searchStr+'');
+		gr.query();
+
+		if(gr.getRowCount() == 0){
+			obj = {};
+				obj.parent ='end';
+				obj.child = searchStr+'';
+				finalResult[gr.sys_id+''] = obj;
+			}
+
+			while(gr.next()){
+				obj = {};
+					obj.parent = searchStr+'';
+					obj.child = gr.search_token+'';
+					finalResult[gr.sys_id+searchStr+''] = obj;
+					if(searchedArray.indexOf(gr.search_token+'') < 0 && searchArray.indexOf(gr.search_token+'') < 0){
+						searchArray.push(gr.search_token+'');
+					}
+				}
+		//initiateSearch(searchArray,finalResult);
+		if(searchArray.length==0){
+			return;
+		}
+		else{
+			iterateSearch(searchArray,finalResult,searchedArray);
+		}
+			}
+searchmethod();
+	*/
+	
+	
+	
+	type: 'BaseTableSearchAjax'
+});]]></script>
+        <sys_class_name>sys_script_include</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2018-10-16 19:44:56</sys_created_on>
+        <sys_id>8132637fdb8d2300ba189ea3db961921</sys_id>
+        <sys_mod_count>61</sys_mod_count>
+        <sys_name>BaseTableSearchAjax</sys_name>
+        <sys_package display_value="super search" source="x_snc_super_search">4863b5fddbc52740ba189ea3db961925</sys_package>
+        <sys_policy>read</sys_policy>
+        <sys_scope display_value="super search">4863b5fddbc52740ba189ea3db961925</sys_scope>
+        <sys_update_name>sys_script_include_8132637fdb8d2300ba189ea3db961921</sys_update_name>
+        <sys_updated_by>ritwik</sys_updated_by>
+        <sys_updated_on>2018-10-29 09:11:16</sys_updated_on>
+    </sys_script_include>
+</record_update>

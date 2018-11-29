@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sp_widget">
+    <sp_widget action="INSERT_OR_UPDATE">
+        <category>custom</category>
+        <client_script><![CDATA[function() {
+	/* widget controller */
+	var c = this;
+	// SurfDev3,Eloqua EQ1,SurfDev3,SAP Dev230,SabaSB,SurfDev3,SurfDev3,SabaSB
+	
+	var nodes = new vis.DataSet([
+	{
+		"id": "SurfDev3",
+		"label": "SurfDev3"
+	},
+	{
+		"id": "Eloqua EQ1",
+		"label": "Eloqua EQ1"
+	},
+	{
+		"id": "SAP Dev230",
+		"label": "SAP Dev230"
+	},
+	{
+		"id": "SabaSB",
+		"label": "SabaSB"
+	}
+	]);
+	
+	
+	var edges = new vis.DataSet([
+	{
+		"from": "SurfDev3",
+		"to": "Eloqua EQ1",
+		"arrows": "to"
+	},
+	{
+		"from": "SurfDev3",
+		"to": "SAP Dev230",
+		"arrows": "to"
+	},
+	{
+		"from": "SabaSB",
+		"to": "SurfDev3",
+		"arrows": "to"
+	},
+	{
+		"from": "SurfDev3",
+		"to": "SabaSB",
+		"arrows": "to"
+	}
+	]);
+	
+	
+	var container = document.getElementById('sct-network');
+	var data = {
+		nodes: nodes,
+		edges: edges
+	};
+	var options = {
+		nodes: {
+			shape: 'dot',
+			scaling: {
+				label: {
+					min: 8,
+					max: 20
+				}
+			}
+		}
+	};
+	var network = new vis.Network(container, data, options);
+	
+	/*{
+		"mapping": [
+		{
+			"from": "SurfDev3",
+			"to": "Eloqua EQ1",
+			"arrows": "to"
+		},
+		{
+			"from": "SurfDev3",
+			"to": "SAP Dev230",
+			"arrows": "to"
+		},
+		{
+			"from": "SabaSB",
+			"to": "SurfDev3",
+			"arrows": "to"
+		},
+		{
+			"from": "SurfDev3",
+			"to": "SabaSB",
+			"arrows": "to"
+		}
+		],
+		"instanceNames": [
+		{
+			"id": "SurfDev3",
+			"name": "SurfDev3"
+		},
+		{
+			"id": "Eloqua EQ1",
+			"name": "Eloqua EQ1"
+		},
+		{
+			"id": "SAP Dev230",
+			"name": "SAP Dev230"
+		},
+		{
+			"id": "SabaSB",
+			"name": "SabaSB"
+		}
+		]
+	}*/
+}]]></client_script>
+        <controller_as>c</controller_as>
+        <css>
+#sct-network{
+height:500px;
+}</css>
+        <data_table>sp_instance</data_table>
+        <demo_data/>
+        <description/>
+        <docs/>
+        <field_list/>
+        <has_preview>true</has_preview>
+        <id/>
+        <internal>false</internal>
+        <link/>
+        <name>testrnwidget</name>
+        <option_schema/>
+        <public>false</public>
+        <roles/>
+        <script><![CDATA[(function() {
+	/* populate the 'data' object */
+	/* e.g., data.table = $sp.getValue('table'); */
+	
+})();]]></script>
+        <servicenow>false</servicenow>
+        <sys_class_name>sp_widget</sys_class_name>
+        <sys_created_by>ritwik</sys_created_by>
+        <sys_created_on>2018-10-23 10:10:41</sys_created_on>
+        <sys_id>da31654adbd92700c3ab36cb7c9619d9</sys_id>
+        <sys_mod_count>15</sys_mod_count>
+        <sys_name>testrnwidget</sys_name>
+        <sys_package display_value="super search" source="x_snc_super_search">4863b5fddbc52740ba189ea3db961925</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="super search">4863b5fddbc52740ba189ea3db961925</sys_scope>
+        <sys_update_name>sp_widget_da31654adbd92700c3ab36cb7c9619d9</sys_update_name>
+        <sys_updated_by>ritwik</sys_updated_by>
+        <sys_updated_on>2018-10-23 10:38:50</sys_updated_on>
+        <template><![CDATA[<div id="sct-network"></div>
+]]></template>
+    </sp_widget>
+</record_update>
