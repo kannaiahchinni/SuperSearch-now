@@ -19,18 +19,25 @@
         <sys_class_name>sp_portal</sys_class_name>
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2018-11-29 04:51:44</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
         <sys_id>b0ab7ab54fce23009d3ea3618110c76b</sys_id>
         <sys_mod_count>1</sys_mod_count>
         <sys_name>Super Search</sys_name>
         <sys_package display_value="super search" source="x_snc_super_search">4863b5fddbc52740ba189ea3db961925</sys_package>
         <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
         <sys_scope display_value="super search">4863b5fddbc52740ba189ea3db961925</sys_scope>
         <sys_update_name>sp_portal_b0ab7ab54fce23009d3ea3618110c76b</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
         <sys_updated_on>2018-11-29 04:56:04</sys_updated_on>
         <theme display_value="Super Search">d8cbbab54fce23009d3ea3618110c7f4</theme>
         <title>Super Search</title>
+        <u_kb_article_page/>
+        <u_kb_category_page/>
+        <u_kb_knowledge_bases/>
+        <u_sc_catalogs/>
+        <u_sc_item_page/>
+        <u_search_page/>
         <url_suffix>ss</url_suffix>
     </sp_portal>
-    <sys_translated_text action="delete_multiple" query="documentkey=b0ab7ab54fce23009d3ea3618110c76b"/>
 </record_update>

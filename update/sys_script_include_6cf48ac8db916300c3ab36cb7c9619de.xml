@@ -3,6 +3,7 @@
         <access>package_private</access>
         <active>true</active>
         <api_name>x_snc_super_search.SCT_ProcessArtifacts</api_name>
+        <caller_access/>
         <client_callable>false</client_callable>
         <description/>
         <name>SCT_ProcessArtifacts</name>
@@ -32,11 +33,13 @@ SCT_ProcessArtifacts.prototype = {
         <sys_class_name>sys_script_include</sys_class_name>
         <sys_created_by>ritwik</sys_created_by>
         <sys_created_on>2018-10-17 07:37:27</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
         <sys_id>6cf48ac8db916300c3ab36cb7c9619de</sys_id>
         <sys_mod_count>1</sys_mod_count>
         <sys_name>SCT_ProcessArtifacts</sys_name>
         <sys_package display_value="super search" source="x_snc_super_search">4863b5fddbc52740ba189ea3db961925</sys_package>
         <sys_policy>read</sys_policy>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
         <sys_scope display_value="super search">4863b5fddbc52740ba189ea3db961925</sys_scope>
         <sys_update_name>sys_script_include_6cf48ac8db916300c3ab36cb7c9619de</sys_update_name>
         <sys_updated_by>ritwik</sys_updated_by>

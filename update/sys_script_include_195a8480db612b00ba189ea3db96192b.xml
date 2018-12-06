@@ -3,6 +3,7 @@
         <access>package_private</access>
         <active>true</active>
         <api_name>x_snc_super_search.SSALineItemFlagFirstTimePurchase</api_name>
+        <caller_access/>
         <client_callable>false</client_callable>
         <description/>
         <name>SSALineItemFlagFirstTimePurchase</name>
@@ -16,11 +17,13 @@ SSALineItemFlagFirstTimePurchase.prototype = {
         <sys_class_name>sys_script_include</sys_class_name>
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2018-10-29 08:55:32</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
         <sys_id>195a8480db612b00ba189ea3db96192b</sys_id>
         <sys_mod_count>0</sys_mod_count>
         <sys_name>SSALineItemFlagFirstTimePurchase</sys_name>
         <sys_package display_value="super search" source="x_snc_super_search">4863b5fddbc52740ba189ea3db961925</sys_package>
         <sys_policy>read</sys_policy>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
         <sys_scope display_value="super search">4863b5fddbc52740ba189ea3db961925</sys_scope>
         <sys_update_name>sys_script_include_195a8480db612b00ba189ea3db96192b</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>

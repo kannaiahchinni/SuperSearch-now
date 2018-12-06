@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_script_include">
+    <sys_script_include action="INSERT_OR_UPDATE">
+        <access>package_private</access>
+        <active>true</active>
+        <api_name>x_snc_super_search.CallStackParserScript</api_name>
+        <caller_access/>
+        <client_callable>false</client_callable>
+        <description/>
+        <name>CallStackParserScript</name>
+        <script><![CDATA[var CallStackParserScript = Class.create();
+CallStackParserScript.prototype = {
+	initialize: function() {
+	},
+	parseResponse: function(responseArray) {
+		try{
+			if(responseArray.length > 0 ) {
+				for(var i =0 ; i < responseArray.length; i++ ) {
+					var script = responseArray[0];
+					var script_sys_id = script.sys_id;
+					var script_name = script.name;
+					var scriptFunctions = script.result.memberFunctions;
+					for(var method in scriptFunctions) {
+						var stackStrace = tree[method];
+						if(stackStrace.length>0){
+							//insert new tree record
+							var newTreeGr = new GlideRecord('x_snc_super_search_base_map');
+							newTreeGr.initialize();
+							newTreeGr.artifact_sys_id = script_sys_id;
+							newTreeGr.artifact_name = script_name;
+							newTreeGr.child_artifact = method;
+							newTreeGr.method = stackStrace+',';
+							newTreeGr.search_token = script_name+'.'+method;//name.method
+							newTreeGr.insert();
+						}
+					}
+				}
+			}
+		}catch(error){
+		}
+	},
+	callAstParserApi: function(body) {
+		var responseJsonArray = [];
+		try {
+			var r = new sn_ws.RESTMessageV2('x_snc_super_search.AST Parser', 'astParser');
+			r.setRequestBody(body);
+			var response = r.execute();
+			responseJsonArray = response.getBody();
+			var httpStatus = response.getStatusCode();
+		}
+		catch(ex) {
+			var message = ex.message;
+		}
+		return responseJsonArray;
+	},
+	/*
+	return json object array
+	JSON object having following properties
+	{
+		name : script name,
+		sys_id: sys_id of the script,
+		data: script content,
+		result: call stack array,
+		modified date: date
+	}
+	
+ 	*/
+	getScripts: function() {
+		var outputJson = {};
+			outputJson.data = [];
+			return outputJson;
+		},
+		type: 'CallStackParserScript'
+	};]]></script>
+        <sys_class_name>sys_script_include</sys_class_name>
+        <sys_created_by>karunakar.medamoni</sys_created_by>
+        <sys_created_on>2018-12-06 10:44:59</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>d5bf0cdcdbda6f84b1a6f5361d961930</sys_id>
+        <sys_mod_count>3</sys_mod_count>
+        <sys_name>CallStackParserScript</sys_name>
+        <sys_package display_value="super search" source="x_snc_super_search">4863b5fddbc52740ba189ea3db961925</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="super search">4863b5fddbc52740ba189ea3db961925</sys_scope>
+        <sys_update_name>sys_script_include_d5bf0cdcdbda6f84b1a6f5361d961930</sys_update_name>
+        <sys_updated_by>karunakar.medamoni</sys_updated_by>
+        <sys_updated_on>2018-12-06 11:06:57</sys_updated_on>
+    </sys_script_include>
+</record_update>

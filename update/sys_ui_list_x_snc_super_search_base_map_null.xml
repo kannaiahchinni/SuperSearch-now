@@ -73,6 +73,7 @@
             <sys_class_name>sys_ui_list</sys_class_name>
             <sys_created_by>admin</sys_created_by>
             <sys_created_on>2018-10-16 18:52:24</sys_created_on>
+            <sys_customer_update>false</sys_customer_update>
             <sys_domain>global</sys_domain>
             <sys_domain_path>/</sys_domain_path>
             <sys_id>624693f7db8d2300ba189ea3db9619fc</sys_id>
@@ -80,6 +81,7 @@
             <sys_name>x_snc_super_search_base_map</sys_name>
             <sys_package display_value="super search" source="x_snc_super_search">4863b5fddbc52740ba189ea3db961925</sys_package>
             <sys_policy/>
+            <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
             <sys_scope display_value="super search">4863b5fddbc52740ba189ea3db961925</sys_scope>
             <sys_update_name>sys_ui_list_x_snc_super_search_base_map_null</sys_update_name>
             <sys_updated_by>admin</sys_updated_by>

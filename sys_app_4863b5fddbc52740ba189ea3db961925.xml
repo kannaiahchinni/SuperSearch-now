@@ -10,6 +10,7 @@
         <menu/>
         <name>super search</name>
         <private>false</private>
+        <restrict_runtime_access>false</restrict_runtime_access>
         <restrict_table_access>false</restrict_table_access>
         <runtime_access_tracking>permissive</runtime_access_tracking>
         <scope>x_snc_super_search</scope>

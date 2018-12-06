@@ -3,6 +3,7 @@
         <access>public</access>
         <active>true</active>
         <api_name>x_snc_super_search.BaseTableSearchAjax</api_name>
+        <caller_access/>
         <client_callable>true</client_callable>
         <description/>
         <name>BaseTableSearchAjax</name>
@@ -93,6 +94,7 @@ BaseTableSearchAjax.prototype = Object.extendsObject(global.AbstractAjaxProcesso
 		}
 		
 	},
+	
 	
 	calculateLoc: function(nodeDataArray, noOfLeaves){
 		//based on nodes noOfLeaves in array set locations
@@ -197,6 +199,26 @@ searchedArray.push(searchStr)
 searchmethod();
 	*/
 	
+buildJson: function(rangefrom, rangeto){
+	var gr = new GlideRecord('sys_script_include');
+	gr.orderBy('name');
+	gr.chooseWindow(rangefrom, rangeto);
+	gr.query();
+	var arrOfData = [];
+	while (gr.next()) {
+		var data = {};
+			data.name = gr.name+'';
+			data.sys_id = gr.sys_id+'';
+			data.data = gr.script+'';
+			data.result = '';
+			data.lastModifiedDate = gr.sys_updated_on+'';
+		arrOfData.push(data);
+		gs.info('test');
+	}
+	var returnJson = {};
+	returnJson.data = arrOfData;
+	return returnJson;
+	},
 	
 	
 	type: 'BaseTableSearchAjax'
@@ -204,14 +226,16 @@ searchmethod();
         <sys_class_name>sys_script_include</sys_class_name>
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2018-10-16 19:44:56</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
         <sys_id>8132637fdb8d2300ba189ea3db961921</sys_id>
-        <sys_mod_count>78</sys_mod_count>
+        <sys_mod_count>83</sys_mod_count>
         <sys_name>BaseTableSearchAjax</sys_name>
         <sys_package display_value="super search" source="x_snc_super_search">4863b5fddbc52740ba189ea3db961925</sys_package>
         <sys_policy>read</sys_policy>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
         <sys_scope display_value="super search">4863b5fddbc52740ba189ea3db961925</sys_scope>
         <sys_update_name>sys_script_include_8132637fdb8d2300ba189ea3db961921</sys_update_name>
-        <sys_updated_by>harsha</sys_updated_by>
-        <sys_updated_on>2018-11-29 07:00:24</sys_updated_on>
+        <sys_updated_by>sriharsha.yalamuri</sys_updated_by>
+        <sys_updated_on>2018-12-06 11:10:06</sys_updated_on>
     </sys_script_include>
 </record_update>

@@ -5,15 +5,17 @@
         <sys_class_name>sys_report_users_groups</sys_class_name>
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2018-11-12 13:18:14</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
         <sys_id>3ebc8524db7de300ba189ea3db9619e7</sys_id>
         <sys_mod_count>0</sys_mod_count>
         <sys_name>b6bc8524db7de300ba189ea3db9619e7</sys_name>
         <sys_package display_value="super search" source="x_snc_super_search">4863b5fddbc52740ba189ea3db961925</sys_package>
         <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
         <sys_scope display_value="super search">4863b5fddbc52740ba189ea3db961925</sys_scope>
         <sys_update_name>sys_report_users_groups_3ebc8524db7de300ba189ea3db9619e7</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
         <sys_updated_on>2018-11-12 13:18:14</sys_updated_on>
-        <user_id display_value="System Administrator">6816f79cc0a8016401c5a33be04be441</user_id>
+        <user_id display_value="System Administrator">c1ef4bf7db270740d34dffd51d961954</user_id>
     </sys_report_users_groups>
 </record_update>
