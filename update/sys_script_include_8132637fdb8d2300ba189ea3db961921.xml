@@ -44,7 +44,7 @@ BaseTableSearchAjax.prototype = Object.extendsObject(global.AbstractAjaxProcesso
 		}
 		
 		var gr = new GlideRecord('x_snc_super_search_base_map');
-		gr.addQuery('method', 'CONTAINS', searchInp + ',');
+		gr.addQuery('method', 'CONTAINS', searchInp + '@@');
 		gr.query();
 		
 		alreadySearched.push(searchInp);
@@ -217,8 +217,16 @@ buildJson: function(rangefrom, rangeto){
 		gs.info('test');
 	//}
 	gs.info(JSON.stringify(data));
+	//var x = this.buildJson1();
 	return arrOfData;
 	},
+	
+// buildJson1: function(){
+
+// 	var arrOfData1 = [];
+
+// 	return arrOfData1;
+// 	},
 	
 	
 	type: 'BaseTableSearchAjax'
@@ -228,7 +236,7 @@ buildJson: function(rangefrom, rangeto){
         <sys_created_on>2018-10-16 19:44:56</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>8132637fdb8d2300ba189ea3db961921</sys_id>
-        <sys_mod_count>87</sys_mod_count>
+        <sys_mod_count>96</sys_mod_count>
         <sys_name>BaseTableSearchAjax</sys_name>
         <sys_package display_value="super search" source="x_snc_super_search">4863b5fddbc52740ba189ea3db961925</sys_package>
         <sys_policy>read</sys_policy>
@@ -236,6 +244,6 @@ buildJson: function(rangefrom, rangeto){
         <sys_scope display_value="super search">4863b5fddbc52740ba189ea3db961925</sys_scope>
         <sys_update_name>sys_script_include_8132637fdb8d2300ba189ea3db961921</sys_update_name>
         <sys_updated_by>sriharsha.yalamuri</sys_updated_by>
-        <sys_updated_on>2018-12-06 11:35:12</sys_updated_on>
+        <sys_updated_on>2018-12-06 12:56:08</sys_updated_on>
     </sys_script_include>
 </record_update>

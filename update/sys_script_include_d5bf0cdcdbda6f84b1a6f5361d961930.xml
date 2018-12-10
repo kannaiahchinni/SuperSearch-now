@@ -24,6 +24,11 @@ CallStackParserScript.prototype = {
 					var script_name = script.name;
 					gs.info(script.result);
 					var scriptFunctions = script.result.memberFunctions;
+					//clear all record with that script include
+					var gr = new GlideRecord('x_snc_super_search_base_map');
+					gr.addQuery('artifact_sys_id',script_sys_id);
+					gr.query();
+					gr.deleteMultiple();
 					for(var method in scriptFunctions) {
 						var stackStrace = scriptFunctions[method];
 						if(stackStrace.length>0){
@@ -82,14 +87,14 @@ CallStackParserScript.prototype = {
         <sys_created_on>2018-12-06 10:44:59</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>d5bf0cdcdbda6f84b1a6f5361d961930</sys_id>
-        <sys_mod_count>10</sys_mod_count>
+        <sys_mod_count>11</sys_mod_count>
         <sys_name>CallStackParserScript</sys_name>
         <sys_package display_value="super search" source="x_snc_super_search">4863b5fddbc52740ba189ea3db961925</sys_package>
         <sys_policy/>
         <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
         <sys_scope display_value="super search">4863b5fddbc52740ba189ea3db961925</sys_scope>
         <sys_update_name>sys_script_include_d5bf0cdcdbda6f84b1a6f5361d961930</sys_update_name>
-        <sys_updated_by>karunakar.medamoni</sys_updated_by>
-        <sys_updated_on>2018-12-06 11:47:48</sys_updated_on>
+        <sys_updated_by>sriharsha.yalamuri</sys_updated_by>
+        <sys_updated_on>2018-12-06 12:55:24</sys_updated_on>
     </sys_script_include>
 </record_update>
