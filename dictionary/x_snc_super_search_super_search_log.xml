@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?><database>
     <element label="Super Search Log" max_length="40" name="x_snc_super_search_super_search_log" type="collection">
+        <element label="Error Log" max_length="4000" name="error_log" type="string"/>
         <element attributes="ignore_filter_on_new=true" default="javascript:global.getNextObjNumberPadded();" dynamic_default_value="20432dde0f410200c783cd8ce1050e6a" label="Number" max_length="40" name="number" type="string" use_dynamic_default="true"/>
         <element choice="1" label="Request Status" max_length="40" name="request_status" type="choice">
             <choice>
@@ -8,5 +9,6 @@
                 <element inactive_on_update="false" label="Success" sequence="3" value="Success"/>
             </choice>
         </element>
+        <element label="Request Time" max_length="40" name="request_time" type="glide_date_time"/>
     </element>
 </database>

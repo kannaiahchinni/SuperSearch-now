@@ -53,7 +53,7 @@ BaseTableSearchAjax.prototype = Object.extendsObject(global.AbstractAjaxProcesso
 		while (gr.next()) {
 			id++;
 			var cId = pId + id.toString();
-			gs.info(cId);
+			//gs.info(cId);
 			var child = {};
 			var childsObject = this.stackSearchDB(gr.search_token + '', alreadySearched, cId);
 			if(childsObject.toString()=='repeated'){
@@ -82,7 +82,7 @@ BaseTableSearchAjax.prototype = Object.extendsObject(global.AbstractAjaxProcesso
 		var levelCounter = 0;
 		var noOfLeaves = [];
 		this.searchString(searchInp, nodeDataArray, linkDataArray, alreadySearched, levelCounter, noOfLeaves);
-		gs.info(JSON.stringify(linkDataArray));
+		//gs.info(JSON.stringify(linkDataArray));
 		if(linkDataArray.length>0){
 			this.calculateLoc(nodeDataArray, noOfLeaves);
 		
@@ -133,7 +133,7 @@ BaseTableSearchAjax.prototype = Object.extendsObject(global.AbstractAjaxProcesso
 		}
 		
 		levelCounter++;
-		gs.info('rowcount ' +gr.getRowCount());
+		//gs.info('rowcount ' +gr.getRowCount());
 		while (gr.next()) {
 			var treeObj = {
 				'from': searchInp + '',
@@ -216,9 +216,9 @@ buildJson: function(rangefrom, rangeto){
 			data.result = '';
 			data.lastModifiedDate = gr.sys_updated_on+'';
 		arrOfData.push(data);
-		gs.info('test');
+		//gs.info('test');
 	}
-	gs.info(JSON.stringify(arrOfData));
+//	gs.info(JSON.stringify(arrOfData));
 	//var x = this.buildJson1();
 	return arrOfData;
 	},
@@ -230,7 +230,7 @@ buildJson: function(rangefrom, rangeto){
         <sys_created_on>2018-10-16 19:44:56</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>8132637fdb8d2300ba189ea3db961921</sys_id>
-        <sys_mod_count>111</sys_mod_count>
+        <sys_mod_count>112</sys_mod_count>
         <sys_name>BaseTableSearchAjax</sys_name>
         <sys_package display_value="super search" source="x_snc_super_search">4863b5fddbc52740ba189ea3db961925</sys_package>
         <sys_policy>read</sys_policy>
@@ -238,6 +238,6 @@ buildJson: function(rangefrom, rangeto){
         <sys_scope display_value="super search">4863b5fddbc52740ba189ea3db961925</sys_scope>
         <sys_update_name>sys_script_include_8132637fdb8d2300ba189ea3db961921</sys_update_name>
         <sys_updated_by>karunakar.medamoni</sys_updated_by>
-        <sys_updated_on>2019-01-07 06:31:07</sys_updated_on>
+        <sys_updated_on>2019-01-07 06:35:45</sys_updated_on>
     </sys_script_include>
 </record_update>
