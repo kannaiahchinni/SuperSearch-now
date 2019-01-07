@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update sys_domain="global" table="sys_ui_application">
+    <sys_ui_application action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <hint/>
+        <name>Super Searcher</name>
+        <order/>
+        <roles>internal</roles>
+        <sys_class_name>sys_ui_application</sys_class_name>
+        <sys_created_by>sriharsha.yalamuri</sys_created_by>
+        <sys_created_on>2019-01-07 06:13:48</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path>/</sys_domain_path>
+        <sys_id>a394086edb3e2380b1a6f5361d9619df</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Super Searcher</sys_name>
+        <sys_overrides/>
+        <sys_package display_value="super search" source="x_snc_super_search">4863b5fddbc52740ba189ea3db961925</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="super search">4863b5fddbc52740ba189ea3db961925</sys_scope>
+        <sys_update_name>sys_ui_application_a394086edb3e2380b1a6f5361d9619df</sys_update_name>
+        <sys_updated_by>sriharsha.yalamuri</sys_updated_by>
+        <sys_updated_on>2019-01-07 06:13:48</sys_updated_on>
+    </sys_ui_application>
+</record_update>

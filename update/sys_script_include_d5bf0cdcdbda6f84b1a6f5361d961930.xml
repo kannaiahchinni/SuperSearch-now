@@ -13,8 +13,9 @@ CallStackParserScript.prototype = {
 	},
 	parseResponse: function(responseArray) {
 		try{
-			gs.info('got response. processing..');
+			gs.info('got response. processing..'+ JSON.stringify(responseArray));
 			responseArray = JSON.parse(responseArray);
+			
 			if(responseArray.length > 0 ) {
 				gs.info('processing.. inside loop');
 				for(var i =0 ; i < responseArray.length; i++ ) {
@@ -75,9 +76,9 @@ CallStackParserScript.prototype = {
 	}
 	
  	*/
-	getScripts: function() {
+	getScripts: function(start,end) {
 		var outputJson = {};
-			outputJson.data = new BaseTableSearchAjax().buildJson(1,20);
+			outputJson.data = new BaseTableSearchAjax().buildJson(start,end);
 			return JSON.stringify(outputJson);
 		},
 		type: 'CallStackParserScript'
@@ -87,14 +88,14 @@ CallStackParserScript.prototype = {
         <sys_created_on>2018-12-06 10:44:59</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>d5bf0cdcdbda6f84b1a6f5361d961930</sys_id>
-        <sys_mod_count>14</sys_mod_count>
+        <sys_mod_count>24</sys_mod_count>
         <sys_name>CallStackParserScript</sys_name>
         <sys_package display_value="super search" source="x_snc_super_search">4863b5fddbc52740ba189ea3db961925</sys_package>
         <sys_policy/>
         <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
         <sys_scope display_value="super search">4863b5fddbc52740ba189ea3db961925</sys_scope>
         <sys_update_name>sys_script_include_d5bf0cdcdbda6f84b1a6f5361d961930</sys_update_name>
-        <sys_updated_by>karunakar.medamoni</sys_updated_by>
-        <sys_updated_on>2018-12-10 07:21:33</sys_updated_on>
+        <sys_updated_by>sriharsha.yalamuri</sys_updated_by>
+        <sys_updated_on>2018-12-18 10:25:35</sys_updated_on>
     </sys_script_include>
 </record_update>

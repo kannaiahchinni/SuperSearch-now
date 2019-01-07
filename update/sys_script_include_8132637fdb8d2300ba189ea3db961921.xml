@@ -92,7 +92,6 @@ BaseTableSearchAjax.prototype = Object.extendsObject(global.AbstractAjaxProcesso
 		}else{
 			return '';
 		}
-		
 	},
 	
 	
@@ -122,7 +121,7 @@ BaseTableSearchAjax.prototype = Object.extendsObject(global.AbstractAjaxProcesso
 			return;
 		}
 		var gr = new GlideRecord('x_snc_super_search_base_map');
-		gr.addQuery('method', 'CONTAINS', searchInp + ',');
+		gr.addQuery('method', 'CONTAINS', searchInp + '@@');
 		gr.query();
 		
 		alreadySearched.push(searchInp);
@@ -134,6 +133,7 @@ BaseTableSearchAjax.prototype = Object.extendsObject(global.AbstractAjaxProcesso
 		}
 		
 		levelCounter++;
+		gs.info('rowcount ' +gr.getRowCount());
 		while (gr.next()) {
 			var treeObj = {
 				'from': searchInp + '',
@@ -201,10 +201,12 @@ searchmethod();
 	
 buildJson: function(rangefrom, rangeto){
 	var gr = new GlideRecord('sys_script_include');
-	gr.orderByDesc('sys_updated_on');
-	gr.chooseWindow(rangefrom, rangeto);
+	//gr.orderByDesc('sys_updated_on');
+	//gr.chooseWindow(rangefrom, rangeto);
+	//gr.addQuery('sys_id','8d5571660a0a0b5000fc97b926f7f750');
+	gr.addEncodedQuery('scriptLIKEJSUtil.pro');
 	gr.query();
-	//gr.get('d5bf0cdcdbda6f84b1a6f5361d961930');
+	
 	var arrOfData = [];
 	while (gr.next()) {
 		var data = {};
@@ -228,7 +230,7 @@ buildJson: function(rangefrom, rangeto){
         <sys_created_on>2018-10-16 19:44:56</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>8132637fdb8d2300ba189ea3db961921</sys_id>
-        <sys_mod_count>98</sys_mod_count>
+        <sys_mod_count>111</sys_mod_count>
         <sys_name>BaseTableSearchAjax</sys_name>
         <sys_package display_value="super search" source="x_snc_super_search">4863b5fddbc52740ba189ea3db961925</sys_package>
         <sys_policy>read</sys_policy>
@@ -236,6 +238,6 @@ buildJson: function(rangefrom, rangeto){
         <sys_scope display_value="super search">4863b5fddbc52740ba189ea3db961925</sys_scope>
         <sys_update_name>sys_script_include_8132637fdb8d2300ba189ea3db961921</sys_update_name>
         <sys_updated_by>karunakar.medamoni</sys_updated_by>
-        <sys_updated_on>2018-12-10 07:15:36</sys_updated_on>
+        <sys_updated_on>2019-01-07 06:31:07</sys_updated_on>
     </sys_script_include>
 </record_update>
