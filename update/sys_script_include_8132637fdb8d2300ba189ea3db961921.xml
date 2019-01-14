@@ -199,14 +199,10 @@ searchedArray.push(searchStr)
 searchmethod();
 	*/
 	
-buildJson: function(rangefrom, rangeto){
+buildJson: function(encodedQuery){
 	var gr = new GlideRecord('sys_script_include');
-	//gr.orderByDesc('sys_updated_on');
-	//gr.chooseWindow(rangefrom, rangeto);
-	//gr.addQuery('sys_id','8d5571660a0a0b5000fc97b926f7f750');
-	gr.addEncodedQuery('scriptLIKEJSUtil.pro');
+	gr.addEncodedQuery(encodedQuery);
 	gr.query();
-	
 	var arrOfData = [];
 	while (gr.next()) {
 		var data = {};
@@ -215,11 +211,9 @@ buildJson: function(rangefrom, rangeto){
 			data.data = gr.script+'';
 			data.result = '';
 			data.lastModifiedDate = gr.sys_updated_on+'';
-		arrOfData.push(data);
-		//gs.info('test');
+			arrOfData.push(data);
 	}
-//	gs.info(JSON.stringify(arrOfData));
-	//var x = this.buildJson1();
+	gs.info('result of buildJson: '+arrOfData.length+'scripts:'+JSON.stringify(arrOfData));
 	return arrOfData;
 	},
 	
@@ -230,14 +224,14 @@ buildJson: function(rangefrom, rangeto){
         <sys_created_on>2018-10-16 19:44:56</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>8132637fdb8d2300ba189ea3db961921</sys_id>
-        <sys_mod_count>112</sys_mod_count>
+        <sys_mod_count>116</sys_mod_count>
         <sys_name>BaseTableSearchAjax</sys_name>
         <sys_package display_value="super search" source="x_snc_super_search">4863b5fddbc52740ba189ea3db961925</sys_package>
         <sys_policy>read</sys_policy>
         <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
         <sys_scope display_value="super search">4863b5fddbc52740ba189ea3db961925</sys_scope>
         <sys_update_name>sys_script_include_8132637fdb8d2300ba189ea3db961921</sys_update_name>
-        <sys_updated_by>karunakar.medamoni</sys_updated_by>
-        <sys_updated_on>2019-01-07 06:35:45</sys_updated_on>
+        <sys_updated_by>sriharsha.yalamuri</sys_updated_by>
+        <sys_updated_on>2019-01-09 09:36:48</sys_updated_on>
     </sys_script_include>
 </record_update>

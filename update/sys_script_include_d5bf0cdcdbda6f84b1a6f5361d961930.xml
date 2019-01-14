@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?><record_update table="sys_script_include">
     <sys_script_include action="INSERT_OR_UPDATE">
-        <access>package_private</access>
+        <access>public</access>
         <active>true</active>
         <api_name>x_snc_super_search.CallStackParserScript</api_name>
         <caller_access/>
@@ -11,19 +11,16 @@
 CallStackParserScript.prototype = {
 	initialize: function() {
 	},
-	parseResponse: function(responseArray) {
+	parseResponse: function(responseArray,logId) {
+		var errorLog = '';
 		try{
-			gs.info('got response. processing..'+ JSON.stringify(responseArray));
 			responseArray = JSON.parse(responseArray);
-			
-			if(responseArray.length > 0 ) {
-				gs.info('processing.. inside loop');
+			gs.info('Inside parseResponse, response length '+responseArray.length+'response : '+ JSON.stringify(responseArray));
+			if(responseArray && responseArray.length > 0 ) {
 				for(var i =0 ; i < responseArray.length; i++ ) {
 					var script = responseArray[i];
-					gs.info(JSON.stringify(script));
 					var script_sys_id = script.sys_id;
 					var script_name = script.name;
-					gs.info(script.result);
 					var scriptFunctions = script.result.memberFunctions;
 					//clear all record with that script include
 					var gr = new GlideRecord('x_snc_super_search_base_map');
@@ -41,18 +38,28 @@ CallStackParserScript.prototype = {
 							newTreeGr.child_artifact = method;
 							newTreeGr.method = stackStrace+',';
 							newTreeGr.search_token = script_name+'.'+method;//name.method
+							newTreeGr.script_last_updated_on = script.lastModifiedDate+'';
 							newTreeGr.insert();
 						}
+					}
+					if(script.result.error && script.result.error !=''){
+						errorLog = errorLog+'Error in Script '+script_name+': '+script.result.error+ ', ';
+						gs.info('Error in Script '+script_name+': '+script.result.error);
 					}
 				}
 			}
 		}catch(error){
-			gs.info('Error from call stack '+error);
+			errorLog = errorLog+ error+', ';
 		}
-	},
+		finally{
+				var status = (errorLog != '') ? 'Error' : 'Success';
+				this.updateLog(logId,status,errorLog);
+			}
+		},
 	callAstParserApi: function(body) {
 		var responseJsonArray = [];
 		try {
+			gs.info('request body: '+body);
 			var r = new sn_ws.RESTMessageV2('x_snc_super_search.AST Parser', 'astParser');
 			r.setRequestBody(body);
 			var response = r.execute();
@@ -76,11 +83,84 @@ CallStackParserScript.prototype = {
 	}
 	
  	*/
-	getScripts: function(start,end) {
+	getScripts: function(logId) {
 		var outputJson = {};
-			outputJson.data = new BaseTableSearchAjax().buildJson(start,end);
+		var encodedQuery = 'sys_idIN'+this.runCallStackForLatestScripts();
+			outputJson.data = new BaseTableSearchAjax().buildJson(encodedQuery);
 			return JSON.stringify(outputJson);
 		},
+	
+	runCallStackForLatestScripts: function(){
+		var scriptIncludesArray = this.getScriptsArray();
+		var baseMapobj = this.getBaseMapObj();
+		var latestScripts = [];
+		var selectedScripts = 0;
+		for(var x = 0; x<scriptIncludesArray.length; x++){
+			if(baseMapobj[scriptIncludesArray[x].sys_id] != scriptIncludesArray[x].Updated){
+				latestScripts.push(scriptIncludesArray[x].sys_id+'');
+				selectedScripts++;
+				if(selectedScripts > 500){
+					gs.info('result of runCallStackForLatestScripts: '+latestScripts.length+'scripts:'+latestScripts.join());
+					return latestScripts.join();
+				}
+			}
+		}
+		gs.info('result of runCallStackForLatestScripts: '+latestScripts.length+'scripts:'+latestScripts.join());
+		return latestScripts.join();
+	},
+	
+	getScriptsArray: function(){
+		var scriptIncludes = [];
+		var obj = {};
+			var siGr = new GlideAggregate('sys_script_include');
+			siGr.addQuery('active','true');
+			siGr.addNotNullQuery('sys_updated_on');
+			siGr.addNotNullQuery('sys_id');
+			siGr.query();
+			while(siGr.next()){
+				obj['sys_id'] = siGr.sys_id+'';
+				obj['Updated'] = siGr.sys_updated_on+'';
+				scriptIncludes.push(obj);
+				obj = {};
+				}
+		gs.info('result of getScriptsArray: '+scriptIncludes.length+'scripts:'+scriptIncludes.join());
+		return scriptIncludes;
+	},
+	
+	getBaseMapObj: function(){
+		var obj = {};
+			var siGr = new GlideAggregate('x_snc_super_search_base_map');
+			siGr.addNotNullQuery('script_last_updated_on');
+			siGr.addNotNullQuery('artifact_sys_id');
+			siGr.query();
+			while(siGr.next()){
+				var sys_id = siGr.artifact_sys_id+'';
+				obj[sys_id] = siGr.script_last_updated_on+'';
+				}
+		gs.info('result of getBaseMapObj: '+JSON.stringify(obj));
+		return obj;
+		
+	},
+	
+	createLog: function(){
+	
+		var logGr = new GlideRecord('x_snc_super_search_super_search_log');
+		logGr.initialize();
+		logGr.request_status = 'Processing';
+		logGr.insert();
+		return logGr.sys_id;
+	},
+	updateLog: function(logSysId,status,error){
+	
+		var logGr = new GlideRecord('x_snc_super_search_super_search_log');
+		logGr.get(logSysId);
+		
+		logGr.request_status = status;
+		logGr.error_log = error;
+		logGr.update();
+		gs.info('logger updated: '+logGr.number);
+		return logGr.number;
+	},
 		type: 'CallStackParserScript'
 	};]]></script>
         <sys_class_name>sys_script_include</sys_class_name>
@@ -88,7 +168,7 @@ CallStackParserScript.prototype = {
         <sys_created_on>2018-12-06 10:44:59</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>d5bf0cdcdbda6f84b1a6f5361d961930</sys_id>
-        <sys_mod_count>24</sys_mod_count>
+        <sys_mod_count>54</sys_mod_count>
         <sys_name>CallStackParserScript</sys_name>
         <sys_package display_value="super search" source="x_snc_super_search">4863b5fddbc52740ba189ea3db961925</sys_package>
         <sys_policy/>
@@ -96,6 +176,6 @@ CallStackParserScript.prototype = {
         <sys_scope display_value="super search">4863b5fddbc52740ba189ea3db961925</sys_scope>
         <sys_update_name>sys_script_include_d5bf0cdcdbda6f84b1a6f5361d961930</sys_update_name>
         <sys_updated_by>sriharsha.yalamuri</sys_updated_by>
-        <sys_updated_on>2018-12-18 10:25:35</sys_updated_on>
+        <sys_updated_on>2019-01-10 16:04:49</sys_updated_on>
     </sys_script_include>
 </record_update>

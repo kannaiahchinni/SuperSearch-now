@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?><database>
-    <element label="Base Map" max_length="40" name="x_snc_super_search_base_map" type="collection">
+    <element label="Base Map" max_length="40" name="x_snc_super_search_base_map" sizeclass="11543" type="collection">
         <element label="Artifact" max_length="80" name="artifact_name" type="string"/>
         <element label="Artifact Sys ID" max_length="32" name="artifact_sys_id" type="string"/>
         <element label="Artifact Method" max_length="100" name="child_artifact" type="string"/>
+        <element label="Last Updated on" max_length="40" name="last_updated_on" type="glide_date_time"/>
         <element label="Method Calls Stack" max_length="2000" name="method" type="string"/>
+        <element label="Script Last updated on" max_length="40" name="script_last_updated_on" type="string"/>
         <element label="Search Token" max_length="200" name="search_token" type="string"/>
     </element>
 </database>
