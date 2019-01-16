@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_css">
+    <sp_css action="INSERT_OR_UPDATE">
+        <css>.km-overlay{display:block;position:fixed;top:0;left:0;height:100%;width:100%;z-index:100000;background-color:rgba(0,0,0,.5)}.km-modal{box-shadow:0 3px 11px 0 #9E9E9E;height:100px;padding:20px;background:#FFF;border-radius:10px;width:200px}.km-loader{border:10px solid #646464;border-top:10px solid #81B5A1;border-bottom:10px solid #81B5A1;border-radius:50%;width:50px;height:50px;animation:spin 1s linear infinite;}@keyframes spin{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}.km-vertical{left:0;bottom:0;top:0;right:0;margin:auto;position:absolute}&#13;
+.km-loading-text { &#13;
+    padding:10px;&#13;
+    font-size:18px;&#13;
+}&#13;
+.km-modal-content {&#13;
+   display: flex;&#13;
+   flex-direction: row;&#13;
+   justify-content: space-between;&#13;
+   margin-top: 5%;&#13;
+   vertical-align: middle;&#13;
+   align-items: center;&#13;
+}&#13;
+&#13;
+.km-loader {&#13;
+    width: 100px;&#13;
+    height: 100px;&#13;
+    border-radius: 50%;&#13;
+    border: 3px solid transparent;&#13;
+    border-top-color: #81B5A1;&#13;
+    -webkit-animation: spin 2s linear infinite;&#13;
+    animation: spin 2s linear infinite;&#13;
+}&#13;
+.km-loader:before {&#13;
+    content: "";&#13;
+    position: absolute;&#13;
+    top: 5px;&#13;
+    left: 5px;&#13;
+    right: 5px;&#13;
+    bottom: 5px;&#13;
+    border-radius: 50%;&#13;
+    border: 3px solid transparent;&#13;
+    border-top-color: #fff;&#13;
+    -webkit-animation: spin 3s linear infinite;&#13;
+    animation: spin 3s linear infinite;&#13;
+}&#13;
+.km-loader:after {&#13;
+    content: "";&#13;
+    position: absolute;&#13;
+    top: 15px;&#13;
+    left: 15px;&#13;
+    right: 15px;&#13;
+    bottom: 15px;&#13;
+    border-radius: 50%;&#13;
+    border: 3px solid transparent;&#13;
+    border-top-color: #293e40;&#13;
+    -webkit-animation: spin 1.5s linear infinite;&#13;
+    animation: spin 1.5s linear infinite;&#13;
+}&#13;
+@-webkit-keyframes spin {&#13;
+    0%   {&#13;
+        -webkit-transform: rotate(0deg);&#13;
+        -ms-transform: rotate(0deg);&#13;
+        transform: rotate(0deg);&#13;
+    }&#13;
+    100% {&#13;
+        -webkit-transform: rotate(360deg);&#13;
+        -ms-transform: rotate(360deg);&#13;
+        transform: rotate(360deg);&#13;
+    }&#13;
+}&#13;
+@keyframes spin {&#13;
+    0%   {&#13;
+        -webkit-transform: rotate(0deg);&#13;
+        -ms-transform: rotate(0deg);&#13;
+        transform: rotate(0deg);&#13;
+    }&#13;
+    100% {&#13;
+        -webkit-transform: rotate(360deg);&#13;
+        -ms-transform: rotate(360deg);&#13;
+        transform: rotate(360deg);&#13;
+    }&#13;
+}&#13;
+&#13;
+/* override css */&#13;
+.km-modal {&#13;
+ 	background:none !important;&#13;
+    box-shadow:none !important;&#13;
+  	padding:0 0 0 3em;&#13;
+}&#13;
+.km-loading-text {&#13;
+ 	display:none; &#13;
+}</css>
+        <name>loder-km.css</name>
+        <sys_class_name>sp_css</sys_class_name>
+        <sys_created_by>karunakar.medamoni</sys_created_by>
+        <sys_created_on>2019-01-16 04:07:02</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>c3ddfd95db83eb80b1a6f5361d961988</sys_id>
+        <sys_mod_count>4</sys_mod_count>
+        <sys_name>loder-km.css</sys_name>
+        <sys_package display_value="super search" source="x_snc_super_search">4863b5fddbc52740ba189ea3db961925</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="super search">4863b5fddbc52740ba189ea3db961925</sys_scope>
+        <sys_update_name>sp_css_c3ddfd95db83eb80b1a6f5361d961988</sys_update_name>
+        <sys_updated_by>karunakar.medamoni</sys_updated_by>
+        <sys_updated_on>2019-01-16 04:31:01</sys_updated_on>
+    </sp_css>
+</record_update>

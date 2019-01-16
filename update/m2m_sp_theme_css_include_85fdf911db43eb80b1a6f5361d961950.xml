@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="m2m_sp_theme_css_include">
+    <m2m_sp_theme_css_include action="INSERT_OR_UPDATE">
+        <order/>
+        <sp_css_include display_value="loder-km.css">94dd7d95db83eb80b1a6f5361d9619c7</sp_css_include>
+        <sp_theme display_value="Super Search">d8cbbab54fce23009d3ea3618110c7f4</sp_theme>
+        <sys_class_name>m2m_sp_theme_css_include</sys_class_name>
+        <sys_created_by>karunakar.medamoni</sys_created_by>
+        <sys_created_on>2019-01-16 04:07:13</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>85fdf911db43eb80b1a6f5361d961950</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>loder-km.css.Super Search</sys_name>
+        <sys_package display_value="super search" source="x_snc_super_search">4863b5fddbc52740ba189ea3db961925</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="super search">4863b5fddbc52740ba189ea3db961925</sys_scope>
+        <sys_update_name>m2m_sp_theme_css_include_85fdf911db43eb80b1a6f5361d961950</sys_update_name>
+        <sys_updated_by>karunakar.medamoni</sys_updated_by>
+        <sys_updated_on>2019-01-16 04:07:13</sys_updated_on>
+    </m2m_sp_theme_css_include>
+</record_update>
